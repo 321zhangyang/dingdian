@@ -1,6 +1,8 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/tabbar/widgets/tabbar_item.dart';
+import 'package:flutter_dingdian/theme/theme_logic.dart';
+import 'package:get/get.dart';
 
 
 
@@ -68,7 +70,7 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
     String imgUrl = normalImgUrls[index];
     if (_currentIndex == index) {
       //选中的话
-      style = TextStyle(fontSize: 12, color: Color.fromRGBO(253, 92, 80, 1));
+      style = TextStyle(fontSize: 12, color: Get.find<ThemeLogic>().state.themeColor);
       imgUrl = selectedImgUrls[index];
     }
     Widget item = Container(
@@ -81,7 +83,7 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
             SizedBox(
               height: 2,
             ),
-            Image.asset(imgUrl,color: _currentIndex == index ? Colors.red : null,),
+            Image.asset(imgUrl,color: _currentIndex == index ? Get.find<ThemeLogic>().state.themeColor : null,),
             Text(
               appBarTitles[index],
               style: style,

@@ -38,6 +38,8 @@ dependencies:
   cached_network_image: ^3.0.0
   # toast
   flutter_easyloading: ^3.0.0
+  # https://github.com/phoenixsky/fun_flutter_kit
+  fun_flutter_kit : ^0.0.3
 
 dev_dependencies:
   flutter_test:
