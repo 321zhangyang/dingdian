@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -12,7 +14,8 @@ class NetAppDio with DioMixin implements Dio {
   NetAppDio._([BaseOptions? options]) {
     options = BaseOptions(
         baseUrl: _dioConfig.baseUrl,
-        contentType: 'application/json',
+        contentType: Headers.jsonContentType,
+        responseType: ResponseType.json,
         connectTimeout: _defaultConnectTimeout,
         sendTimeout: _defaultSendTimeout,
         receiveTimeout: _defaultReceiveTimeout);

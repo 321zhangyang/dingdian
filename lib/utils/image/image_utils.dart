@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dingdian/network/net_constant.dart';
 
 
 class ImageUtils {
@@ -21,6 +22,10 @@ class ImageUtils {
       return AssetImage(getImgPath(holderImg));
     }
     return CachedNetworkImageProvider(imageUrl);
+  }
+
+  static String getNetWorkPath(String name) {
+    return  NetBaseApi.IMAGE_BASE_URL + '/' + name;
   }
 }
 

@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_dingdian/constant/gaps.dart';
+import 'package:flutter_dingdian/moudules/common/button/button.dart';
+import 'package:flutter_dingdian/utils/image/load_image.dart';
+
+class ShopChooseMenuWidget extends StatelessWidget {
+  List<String> titles = ["推荐", "收藏", "评分", "完结", "热更"];
+  List<String> images = [
+    "KKStriveImg_shop_tj_Normal",
+    "KKStriveImg_shop_sc_Normal",
+    "KKStriveImg_shop_pf_Normal",
+    "KKStriveImg_shop_wj_Normal",
+    "KKStriveImg_shop_rg_Normal"
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: GridView.builder(
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: titles.length,
+            mainAxisSpacing: 0,
+            crossAxisSpacing: 20,
+            childAspectRatio: 0.85),
+        itemCount: titles.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+              onTap: () {},
+              child: Column(
+                children: [LoadAssetImage(images[index]), Gaps.vGap4 ,Text(titles[index])],
+              ));
+        },
+      ),
+    );
+  }
+}

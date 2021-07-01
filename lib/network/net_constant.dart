@@ -1,13 +1,13 @@
 class NetResponseConstant {
   //在这里配置和后端约定好的内容
   static const String data = "data";
-  static const String message = "msg";
-  static const String code = "code";
+  static const String message = "info";
+  static const String code = "status";
 }
 
 class NetErrorCode {
   //数据成功的code
-  static const int SUCCESS = 200;
+  static const int SUCCESS = 1;
   //数据转换错误
   static const int PARSE_ERROR = 1006;
   //请求出错
@@ -31,4 +31,12 @@ class NetBaseApi {
   static const String CONTENT_BASE_URL = "https://contentxs.pysmei.com/";
 
   static const String PROXY = "192.168.62.10:8888";
+
+  static const String IMAGE_BASE_URL = "https://scxs.pysmei.com";
+
+  static const Map BASE_URL_MAP = {
+    "normal" : "https://scxs.pysmei.com",
+    "info" : "https://infosxs.pysmei.com",
+    "content" : "https://contentxs.pysmei.com"
+  };
 }

@@ -12,7 +12,7 @@ class LoadImage extends StatelessWidget {
     this.height,
     this.fit = BoxFit.cover, 
     this.format = ImageFormat.png,
-    this.holderImg = 'none',
+    this.holderImg = 'bookdan_icondefault_Normal',
     this.cacheWidth,
     this.cacheHeight,
   }) : assert(image != null, 'The [image] argument must not be null.'),

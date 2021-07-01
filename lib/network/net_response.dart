@@ -1,5 +1,3 @@
-
-
 import 'package:flutter_dingdian/network/net_constant.dart';
 
 class NetBaseResponse<T> {
@@ -10,8 +8,9 @@ class NetBaseResponse<T> {
 
   NetBaseResponse(this.code, this.message, this.data, this.success);
 
-  NetBaseResponse.fromJson(Map<String, dynamic> json) {
+  NetBaseResponse.fromJson( json) {
     code = json[NetResponseConstant.code];
+    print("code === $code");
     message = json[NetResponseConstant.message];
     if (json.containsKey(NetResponseConstant.data)) {
       data = json[NetResponseConstant.data];

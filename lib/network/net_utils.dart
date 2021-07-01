@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dingdian/network/net_constant.dart';
 import 'package:flutter_dingdian/network/net_dio.dart';
 import 'package:flutter_dingdian/network/net_response.dart';
-
 
 enum Method {
   get,
@@ -44,10 +45,12 @@ class NetUtils {
           data: data,
           queryParameters: queryParameters,
           cancelToken: cancelToken);
+      print(response.data.runtimeType);
       try {
-        NetBaseResponse baseResponse = NetBaseResponse.fromJson(response.data);
+        NetBaseResponse baseResponse = NetBaseResponse.fromJson(json.decode(response.data));
         return baseResponse;
       } catch (e) {
+        print(e);
         return NetBaseResponse(
             NetErrorCode.PARSE_ERROR, NetErrorMsg.PARSE_ERROR, null, false);
       }
