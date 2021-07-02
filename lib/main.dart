@@ -18,7 +18,7 @@ void main() async {
       return FunFlutterConfiguration(
         funStateBehavior: FunStateBehavior(
           /// 全局分页参数设置
-          paging: FunStatePaging(firstPageNo: 1, pageSize: 20),
+          paging: FunStatePaging(firstPageNo: 1, pageSize: 10),
         ),
         child: GetMaterialApp(
           debugShowCheckedModeBanner: false,

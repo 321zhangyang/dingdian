@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
+import 'package:flutter_dingdian/moudules/shop/choose/choose/logic.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/choose_model.dart';
 import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
+import 'package:get/get.dart';
 
-class ShopChooseListItem extends StatelessWidget {
+class ShopChooseItem extends StatelessWidget {
   final BookChooseModel? model;
+  final _logic = Get.find<ShopChooseLogic>();
   final double imageWidth = (ScreenUtil.getInstance().screenWidth - 90) / 3;
 
-  ShopChooseListItem({Key? key, this.model}) : super(key: key);
+  ShopChooseItem({Key? key, this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -102,9 +105,12 @@ class ShopChooseListItem extends StatelessWidget {
             childAspectRatio: 0.5),
         itemCount: 6,
         itemBuilder: (context, index) {
-          Books books = model!.books![model!.books!.length > 6 ? index + 1 : index];
+          Books books =
+              model!.books![model!.books!.length > 6 ? index + 1 : index];
           return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -153,7 +159,7 @@ class ShopChooseListItem extends StatelessWidget {
           ),
           Spacer(),
           GestureDetector(
-            onTap: () => null,
+            onTap: () => _logic.jumpToMore(model!.category ?? "", model!.more ?? ""),
             child: Container(
               width: 50,
               height: 30,

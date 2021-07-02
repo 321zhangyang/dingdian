@@ -27,7 +27,7 @@ class ShopChoosePage extends StatelessWidget {
           enablePullDown: true,
           enablePullUp: false,
           controller: logic.refreshController,
-          onRefresh: () => logic.refreshController.refreshCompleted(),
+          onRefresh: () => logic.getdata(),
           child: ListView.separated(
             separatorBuilder: (context, index) {
               return Container(
@@ -43,7 +43,7 @@ class ShopChoosePage extends StatelessWidget {
                 );
               } else {
                 BookChooseModel model = logic.state.choose![index - 1];
-                return ShopChooseListItem(model: model,);
+                return ShopChooseItem(model: model,);
               }
             },
             itemCount: logic.state.choose!.length + 1,

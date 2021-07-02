@@ -26,17 +26,15 @@ class NetErrorMsg {
 class NetBaseApi {
   static const String BASE_URL = "https://scxs.pysmei.com";
 
-  static const String INFO_BASE_URL = "https://infosxs.pysmei.com/";
-
-  static const String CONTENT_BASE_URL = "https://contentxs.pysmei.com/";
-
   static const String PROXY = "192.168.62.10:8888";
 
-  static const String IMAGE_BASE_URL = "https://scxs.pysmei.com";
+  static const String IMAGE_BASE_URL = "https://imgapixs.pysmei.com/BookFiles/BookImages";
 
   static const Map BASE_URL_MAP = {
     "normal" : "https://scxs.pysmei.com",
     "info" : "https://infosxs.pysmei.com",
-    "content" : "https://contentxs.pysmei.com"
+    "content" : "https://contentxs.pysmei.com",
+    "search" : "https://souxs.leeyegy.com/search.aspx/",
+    "user" : "https://userxs.pigqq.com"
   };
 }
