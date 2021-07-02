@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
+import 'package:flutter_dingdian/moudules/shop/choose/choose/logic.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/choose_model.dart';
 import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
+import 'package:get/get.dart';
 
 class ShopChooseListItem extends StatelessWidget {
+  final _logic = Get.find<ShopChooseLogic>();
   final BookChooseModel? model;
   final double imageWidth = (ScreenUtil.getInstance().screenWidth - 90) / 3;
 
@@ -27,63 +30,66 @@ class ShopChooseListItem extends StatelessWidget {
   }
 
   //顶部item
-  Container buildTopItem() {
+  Widget buildTopItem() {
     Books books = model!.books!.first;
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          LoadImage(
-            ImageUtils.getNetWorkPath(books.img ?? ""),
-            holderImg: "app_placeholder",
-            width: imageWidth,
-            height: imageWidth * 1.3,
-          ),
-          Gaps.hGap15,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  books.name ?? "",
-                  style: TextStyle(fontSize: Dimensions.font_sp16),
-                  maxLines: 1,
-                ),
-                Gaps.vGap10,
-                Text(
-                  books.desc ?? "",
-                  style: TextStyle(
-                      fontSize: Dimensions.font_sp14,
-                      color: MyColors.text_gray_color),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: [
-                    Text(
-                      books.author ?? "",
-                      style: TextStyle(
-                          fontSize: Dimensions.font_sp14,
-                          color: MyColors.text_gray_color),
-                      maxLines: 1,
-                    ),
-                    Spacer(),
-                    Text(
-                      books.score ?? "",
-                      style: TextStyle(
-                          fontSize: Dimensions.font_sp14,
-                          color: Color.fromRGBO(247, 143, 44, 1)),
-                    )
-                  ],
-                ),
-              ],
+    return GestureDetector(
+      onTap: () => _logic.jumpToDetail(books.id.toString()),
+          child: Container(
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            LoadImage(
+              ImageUtils.getNetWorkPath(books.img ?? ""),
+              holderImg: "app_placeholder",
+              width: imageWidth,
+              height: imageWidth * 1.3,
             ),
-          )
-        ],
+            Gaps.hGap15,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    books.name ?? "",
+                    style: TextStyle(fontSize: Dimensions.font_sp16),
+                    maxLines: 1,
+                  ),
+                  Gaps.vGap10,
+                  Text(
+                    books.desc ?? "",
+                    style: TextStyle(
+                        fontSize: Dimensions.font_sp14,
+                        color: MyColors.text_gray_color),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Gaps.vGap10,
+                  Row(
+                    children: [
+                      Text(
+                        books.author ?? "",
+                        style: TextStyle(
+                            fontSize: Dimensions.font_sp14,
+                            color: MyColors.text_gray_color),
+                        maxLines: 1,
+                      ),
+                      Spacer(),
+                      Text(
+                        books.score ?? "",
+                        style: TextStyle(
+                            fontSize: Dimensions.font_sp14,
+                            color: Color.fromRGBO(247, 143, 44, 1)),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -102,9 +108,12 @@ class ShopChooseListItem extends StatelessWidget {
             childAspectRatio: 0.5),
         itemCount: 6,
         itemBuilder: (context, index) {
-          Books books = model!.books![model!.books!.length > 6 ? index + 1 : index];
+          Books books =
+              model!.books![model!.books!.length > 6 ? index + 1 : index];
           return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                _logic.jumpToDetail(books.id.toString());
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

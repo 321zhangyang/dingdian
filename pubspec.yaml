@@ -45,7 +45,10 @@ dependencies:
   flutter_tab_indicator_styler: ^2.0.0
   # 刷新控件
   pull_to_refresh: ^2.0.0
+  # 轮播图
   flutter_swiper_null_safety: ^1.0.2
+  # 评分软件
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:

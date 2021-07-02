@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_dingdian/moudules/shop/choose/api/repository.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/banner_model.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/choose_model.dart';
+import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_action_controller.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -40,6 +41,12 @@ class ShopChooseLogic extends FunStateActionController {
       changeIdle();
     }).catchError((e) {
       changeError(e);
+    });
+  }
+
+  jumpToDetail(String bookId) {
+    Get.toNamed(Routes.DETAIL, arguments: {
+      "bookId" : bookId
     });
   }
 }
