@@ -44,12 +44,16 @@ class ShopChooseLogic extends FunStateActionController {
     });
   }
 
-  jumpToList(int index,String title) {
-    Get.toNamed(Routes.CHOOSELIST, arguments: {"key": state.menuKeys![index],"title":title});
+  jumpToList(int index, String title) {
+    Get.toNamed(Routes.CHOOSELIST,
+        arguments: {"key": state.menuKeys![index], "title": title});
   }
 
   jumpToMore(String title, String url) {
-     Get.toNamed(Routes.CHOOSEMORE,
-        arguments: {"title": title, "url": url});
+    Get.toNamed(Routes.CHOOSEMORE, arguments: {"title": title, "url": url});
   }
+  
+  jumpToDetail(String bookId) {
+      Get.toNamed(Routes.DETAIL, arguments: {"bookId": bookId});
+    }
 }
