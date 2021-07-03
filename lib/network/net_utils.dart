@@ -45,9 +45,11 @@ class NetUtils {
           data: data,
           queryParameters: queryParameters,
           cancelToken: cancelToken);
-      print(response.data.runtimeType);
+      // 将数据处理下  有些接口返回的数据比较蛋疼 数组后多逗号,在此将他全部替换掉
+      response.data = response.data.replaceAll(",]", "]");
       try {
-        NetBaseResponse baseResponse = NetBaseResponse.fromJson(json.decode(response.data));
+        NetBaseResponse baseResponse =
+            NetBaseResponse.fromJson(json.decode(response.data));
         return baseResponse;
       } catch (e) {
         print(e);
