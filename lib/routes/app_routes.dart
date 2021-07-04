@@ -7,4 +7,5 @@ class Routes {
 
   static const CHOOSEMORE = 'choose/more';
   static const DETAIL = 'book/detail';
+  static const DETAILDIRECTORY = 'book/detail/directory';
 }

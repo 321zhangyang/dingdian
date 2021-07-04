@@ -1,3 +1,4 @@
+import 'package:flutter_dingdian/moudules/detail/direcory/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/more/view.dart';
 import 'package:flutter_dingdian/moudules/detail/detail/view.dart';
@@ -29,6 +30,10 @@ abstract class AppPages {
     GetPage(
       name: Routes.DETAIL,
       page: () => BookDetailPage(),
+    ),
+    GetPage(
+      name: Routes.DETAILDIRECTORY,
+      page: () => BookDetailDirectoryPage(),
     ),
   ];
 }

@@ -49,6 +49,10 @@ dependencies:
   flutter_swiper_null_safety: ^1.0.2
   # 评分软件
   flutter_rating_bar: ^4.0.0
+  # 自定义listview
+  list_group_handler:
+    git:
+      url: https://gitee.com/zeng_li_zhi/ListViewGroupHandler.git
 
 dev_dependencies:
   flutter_test:

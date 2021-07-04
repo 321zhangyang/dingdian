@@ -15,7 +15,7 @@ class NetAppDio with DioMixin implements Dio {
     options = BaseOptions(
         baseUrl: _dioConfig.baseUrl,
         contentType: Headers.jsonContentType,
-        responseType: ResponseType.json,
+        responseType: ResponseType.plain,
         connectTimeout: _defaultConnectTimeout,
         sendTimeout: _defaultSendTimeout,
         receiveTimeout: _defaultReceiveTimeout);

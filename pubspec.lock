@@ -226,6 +226,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.1"
+  list_group_handler:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: e7835ad4e76abc4e1d673ed50e766d2cfa1a3b2b
+      url: "https://gitee.com/zeng_li_zhi/ListViewGroupHandler.git"
+    source: git
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:

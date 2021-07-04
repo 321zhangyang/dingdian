@@ -1,3 +1,5 @@
+import 'package:flutter_dingdian/moudules/detail/direcory/logic.dart';
+import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/network/net_constant.dart';
 import 'package:flutter_dingdian/network/net_response.dart';
@@ -19,4 +21,17 @@ class BookDetailInfoApi {
       throw response.message ?? "出错了";
     }
   }
+  
+  Future<BookDirectoryModel> getDirectory(String url) async {
+     NetBaseResponse response = await _utils.requestDataFuture(
+        Method.get, _info + url,
+        baseUrl: NetBaseApi.BASE_URL_MAP["info"]);
+    if (response.success == true) {
+      BookDirectoryModel model = BookDirectoryModel.fromJson(response.data);
+      return model;
+    } else {
+      throw response.message ?? "出错了";
+    }
+  }
+
 }

@@ -47,7 +47,13 @@ class NetUtils {
           cancelToken: cancelToken);
       print(response.data.runtimeType);
       try {
-        NetBaseResponse baseResponse = NetBaseResponse.fromJson(json.decode(response.data));
+        json.decode(response.data);
+      } catch (e) {
+        print("e ===== e$e");
+      }
+      try {
+        NetBaseResponse baseResponse =
+            NetBaseResponse.fromJson(json.decode(response.data));
         return baseResponse;
       } catch (e) {
         print(e);

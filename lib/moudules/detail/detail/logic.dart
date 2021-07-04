@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
+import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_action_controller.dart';
 import 'package:get/get.dart';
 
@@ -56,5 +58,12 @@ class BookDetailLogic extends FunStateActionController {
       state.showAllUser = model.sameUserBooks!.length > 3 ? false : true;
     }
     return model;
+  }
+
+  jumpToDirectory() {
+    Get.toNamed(Routes.DETAILDIRECTORY, arguments: {
+      "title": state.model?.name,
+      "bookId": state.model?.id
+    });
   }
 }
