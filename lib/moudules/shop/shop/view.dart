@@ -4,6 +4,7 @@ import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/moudules/common/button/button.dart';
 import 'package:flutter_dingdian/moudules/common/segment/segment.dart';
+import 'package:flutter_dingdian/moudules/shop/category/category/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/choose/view.dart';
 import 'package:flutter_dingdian/moudules/shop/shop/logic.dart';
 import 'package:flutter_dingdian/theme/theme_logic.dart';
@@ -86,14 +87,18 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
       ),
       body: Column(
         children: [
-          TabBar(
-            tabs: _logic.state.tabs.map((e) => Tab(text: e)).toList(),
-            labelColor: MyColors().getThemeColor(),
-            unselectedLabelColor: MyColors.text_color,
-            labelStyle: TextStyle(fontSize: Dimensions.font_sp16),
-            controller: _logic.state.controller,
-            indicatorSize: TabBarIndicatorSize.label,
-            onTap: (value) => _logic.changeTab(value),
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              tabs: _logic.state.tabs.map((e) => Tab(text: e)).toList(),
+              labelColor: MyColors().getThemeColor(),
+              unselectedLabelColor: MyColors.text_color,
+              labelStyle: TextStyle(fontSize: Dimensions.font_sp16),
+              controller: _logic.state.controller,
+              indicatorSize: TabBarIndicatorSize.label,
+              onTap: (value) => _logic.changeTab(value),
+              
+            ),
           ),
           Expanded(
               child: PageView.builder(
@@ -103,11 +108,10 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
             itemBuilder: (context, index) {
               if (index == 0) {
                 return ShopChoosePage();
+              } else if (index == 1) {
+                return ShopCategoryPage();
               } else {
-                return Container(
-                  child: Text("hahhahaha"),
-                  color: Colors.green,
-                );
+                return Container();
               }
             },
           ))

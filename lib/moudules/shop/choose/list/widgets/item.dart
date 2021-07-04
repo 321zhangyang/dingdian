@@ -14,6 +14,7 @@ class ShopChooseListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+      color: Colors.white,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

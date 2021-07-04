@@ -50,7 +50,7 @@ class BookDetailLogic extends FunStateActionController {
   Future onLoadData() async {
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
     String bookId = Get.arguments["bookId"];
-    int index = int.parse(bookId.substring(0, bookId.length - 3)) + 1;
+    int index = bookId.length > 3 ?  int.parse(bookId.substring(0, bookId.length - 3)) + 1 : 1;
     String url = "$index/$bookId/info.html";
     BookDetailInfoModel model = await _repository.getChoose(url);
     state.model = model;
@@ -61,9 +61,11 @@ class BookDetailLogic extends FunStateActionController {
   }
 
   jumpToDirectory() {
-    Get.toNamed(Routes.DETAILDIRECTORY, arguments: {
-      "title": state.model?.name,
-      "bookId": state.model?.id
-    });
+    Get.toNamed(Routes.DETAILDIRECTORY,
+        arguments: {"title": state.model?.name, "bookId": state.model?.id});
+  }
+
+  jumpToDetail(String bookId) {
+    print("嘿嘿嘿额");
   }
 }

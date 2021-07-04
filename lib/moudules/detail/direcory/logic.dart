@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
+import 'package:flutter_dingdian/moudules/detail/direcory/widgets/header.dart';
+import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
@@ -31,24 +33,35 @@ class BookDetailDirectoryLogic extends FunStateActionController {
     return model;
   }
 
+  sortTheDirectory() {
+    state.positive = !state.positive;
+    state.model?.list = state.model!.list!.reversed.toList();
+    for (var item in state.model!.list!) {
+      item.list = item.list!.reversed.toList();
+    }
+    update();
+  }
+
   _initGroupHandler() {
     state.groupHandler = ListViewGroupHandler(
       //日志开关
-      openLog: true,
+      openLog: false,
       //分组数量，需要自行根据data设置，默认1
       numberOfSections: state.model!.list!.length,
       //每组cell个数，需要自行根据data设置
       numberOfRowsInSection: (section) =>
           state.model!.list![section].list!.length,
       //indexPath: IndexPath(section,row,index)
-      cellForRowAtIndexPath: (indexPath) => Text("哈哈哈哈"),
+      cellForRowAtIndexPath: (indexPath) => BookDirectoryItemWidget(
+        item: state.model!.list![indexPath.section].list![indexPath.row],
+      ),
       //头部
-      header: () => Text("header"),
+      headerForSection: (section) => BookDirectoryHeaderWidget(
+        name: state.model!.list![section].name,
+      ),
       //占位Placeholder
       emptyPlaceholder: () {
-        return Center(
-          child: Text("暂无数据！"),
-        );
+        return BookDirectoryItemWidget();
       },
     );
   }

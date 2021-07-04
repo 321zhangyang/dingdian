@@ -53,24 +53,27 @@ class BookDetailSameCategoryWidget extends StatelessWidget {
               _logic.state.model!.sameCategoryBooks![index];
           return GestureDetector(
               onTap: () {
-                //_logic.jumpToDetail(books.id.toString());
+                _logic.jumpToDetail(books.id.toString());
               },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LoadImage(
-                    ImageUtils.getNetWorkPath(books.img ?? ""),
-                    holderImg: "app_placeholder",
-                    width: imageWidth,
-                    height: imageWidth * 1.3,
-                  ),
-                  Gaps.vGap5,
-                  Text(
-                    books.name ?? "",
-                    style: TextStyle(fontSize: Dimensions.font_sp16),
-                    maxLines: 1,
-                  ),
-                ],
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    LoadImage(
+                      ImageUtils.getNetWorkPath(books.img ?? ""),
+                      holderImg: "app_placeholder",
+                      width: imageWidth,
+                      height: imageWidth * 1.3,
+                    ),
+                    Gaps.vGap5,
+                    Text(
+                      books.name ?? "",
+                      style: TextStyle(fontSize: Dimensions.font_sp16),
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
               ));
         },
       ),

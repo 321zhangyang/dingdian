@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "name": "玄幻奇幻",
+        "total": 121528,
+        "image": "cateViewIcon_1_Normal"
+    },
+    {
+        "id": 2,
+        "name": "武侠仙侠",
+        "total": 38126,
+        "image": "cateViewIcon_2_Normal"
+    },
+    {
+        "id": 3,
+        "name": "都市言情",
+        "total": 68280,
+        "image": "cateViewIcon_3_Normal"
+    },
+    {
+        "id": 4,
+        "name": "历史军事",
+        "total": 18359,
+        "image": "cateViewIcon_4_Normal"
+    },
+    {
+        "id": 5,
+        "name": "科幻灵异",
+        "total": 43767,
+        "image": "cateViewIcon_5_Normal"
+    },
+    {
+        "id": 6,
+        "name": "网游竞技",
+        "total": 121528,
+        "image": "cateViewIcon_6_Normal"
+    },
+    {
+        "id": 7,
+        "name": "女生频道",
+        "total": 125434,
+        "image": "cateViewIcon_7_Normal"
+    },
+    {
+        "id": 8,
+        "name": "同人小说",
+        "total": 4842,
+        "image": "cateViewIcon_66_Normal"
+    }
+]

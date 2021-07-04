@@ -9,7 +9,8 @@ import 'state.dart';
 class ShopChooseListLogic extends FunStateListRefresherController {
   final state = ShopChooseListState();
   final _repository = Get.find<BookChooseRepository>();
-  FunStatePaging paging() => FunStatePaging(firstPageNo: 1, pageSize: 20);
+
+
   void initTabController(TickerProvider provider) {
     state.controller =
         TabController(vsync: provider, length: state.tabTitles.length);

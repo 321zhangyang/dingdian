@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,10 @@ class MinePage extends StatelessWidget {
       body: Container(
           alignment: Alignment.center,
           child: TextButton(
-              onPressed: () => Get.toNamed(Routes.THEME), child: Text("切换主题"))),
+              onPressed: () {
+                Get.toNamed(Routes.THEME);
+              },
+              child: Text("切换主题"))),
     );
   }
 }

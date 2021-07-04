@@ -36,6 +36,7 @@ class ShopChooseItem extends StatelessWidget {
       onTap: () => _logic.jumpToDetail(books.id.toString()),
           child: Container(
         padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
+        color: Colors.white,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
