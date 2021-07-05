@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dingdian/network/net_constant.dart';
 
-
 class ImageUtils {
   static ImageProvider getAssetImage(String name,
       {ImageFormat format = ImageFormat.png}) {
@@ -25,7 +24,11 @@ class ImageUtils {
   }
 
   static String getNetWorkPath(String name) {
-    return  NetBaseApi.IMAGE_BASE_URL + '/' + name;
+    if (name.startsWith("http")) {
+      return name;
+    }else {
+      return NetBaseApi.IMAGE_BASE_URL + '/' + name;
+    }
   }
 }
 

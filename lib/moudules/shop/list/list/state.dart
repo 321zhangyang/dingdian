@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/common/model/tab_model.dart';
 
-class ShopTopState {
+class ShopBookListState {
   TabController? controller;
-
   List<BookTabModel> tabs = [];
-  List<BookTabModel> subTabs = [];
   BookTabModel? selectModel;
-  BookTabModel? selectSubModel;
-  String type = "hot";
-  String subType = "new";
-  ShopTopState() {
+  ShopBookListState() {
     ///Initialize variables
   }
 }

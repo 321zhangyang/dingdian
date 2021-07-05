@@ -6,6 +6,7 @@ import 'package:flutter_dingdian/moudules/common/widgets/button/button.dart';
 import 'package:flutter_dingdian/moudules/common/widgets/segment/segment.dart';
 import 'package:flutter_dingdian/moudules/shop/category/category/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/choose/view.dart';
+import 'package:flutter_dingdian/moudules/shop/list/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/shop/logic.dart';
 import 'package:flutter_dingdian/moudules/shop/top/top/view.dart';
 import 'package:flutter_dingdian/theme/theme_logic.dart';
@@ -98,7 +99,6 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
               controller: _logic.state.controller,
               indicatorSize: TabBarIndicatorSize.label,
               onTap: (value) => _logic.changeTab(value),
-              
             ),
           ),
           Expanded(
@@ -111,8 +111,10 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
                 return ShopChoosePage();
               } else if (index == 1) {
                 return ShopCategoryPage();
-              } else {
+              } else if (index == 2) {
                 return ShopTopPage();
+              } else {
+                return ShopBookListPage();
               }
             },
           ))
