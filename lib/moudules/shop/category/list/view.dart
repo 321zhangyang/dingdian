@@ -23,7 +23,7 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_logic.state.title),
+        title: Text(_logic.state.model?.name ?? ""),
       ),
       body: Column(
         children: [
@@ -71,7 +71,7 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    
     _logic.initTabController(this);
   }
 }

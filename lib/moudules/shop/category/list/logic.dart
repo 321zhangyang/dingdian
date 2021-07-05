@@ -47,10 +47,18 @@ class ShopCategoryListLogic extends FunStateListRefresherController {
 
   @override
   Future<List<BookList>> onLoadData(int pageNum, {int? pageSize}) async {
-    BookCategoryModel categoryModel = Get.arguments["model"];
+    if (state.model == null) {
+      state.model = Get.arguments["model"];
+    }
+    BookCategoryModel categoryModel = state.model!;
     String url = "/${categoryModel.id}/${state.type}/$pageNum.html";
     BookChooseListModel model = await _repository.getCategroyList(url);
-    state.title = categoryModel.name ?? "";
     return model.bookList ?? [];
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
   }
 }

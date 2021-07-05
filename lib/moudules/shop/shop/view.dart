@@ -2,11 +2,12 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
-import 'package:flutter_dingdian/moudules/common/button/button.dart';
-import 'package:flutter_dingdian/moudules/common/segment/segment.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/button/button.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/segment/segment.dart';
 import 'package:flutter_dingdian/moudules/shop/category/category/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/choose/view.dart';
 import 'package:flutter_dingdian/moudules/shop/shop/logic.dart';
+import 'package:flutter_dingdian/moudules/shop/top/top/view.dart';
 import 'package:flutter_dingdian/theme/theme_logic.dart';
 import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:get/get.dart';
@@ -111,7 +112,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
               } else if (index == 1) {
                 return ShopCategoryPage();
               } else {
-                return Container();
+                return ShopTopPage();
               }
             },
           ))

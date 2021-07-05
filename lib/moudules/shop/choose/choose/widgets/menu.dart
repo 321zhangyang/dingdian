@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
-import 'package:flutter_dingdian/moudules/common/button/button.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/choose/logic.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
 import 'package:get/get.dart';
