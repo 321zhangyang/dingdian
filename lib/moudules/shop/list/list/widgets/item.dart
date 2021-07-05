@@ -42,7 +42,7 @@ class ShopBookListItem extends StatelessWidget {
                 ),
                 Gaps.vGap20,
                 Text(
-                  "共${model?.collectionCount}本书",
+                  "共${model?.bookCount}本书",
                   style: TextStyle(
                       fontSize: Dimensions.font_sp14,
                       color: MyColors.text_color),
