@@ -22,16 +22,16 @@ class ShopCategoryListLogic extends FunStateListRefresherController {
 
   void changeTab(int index) {
     switch (index) {
-      case 1:
+      case 0:
         state.type = "hot";
         break;
-      case 2:
+      case 1:
         state.type = "new";
         break;
-      case 3:
+      case 2:
         state.type = "vote";
         break;
-      case 4:
+      case 3:
         state.type = "over";
         break;
       default:

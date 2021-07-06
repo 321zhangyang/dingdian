@@ -44,12 +44,18 @@ class _ShopBookListPageState extends State<ShopBookListPage>
                 itemBuilder: (context, index) {
                   ShopBookListModel model = _logic.list[index];
                   if (state.selectModel?.key == "commend") {
-                    return ShopBookListCommendItem(
-                      model: model,
+                    return GestureDetector(
+                      onTap: () => _logic.jumpToDetail(model.listId.toString()),
+                                          child: ShopBookListCommendItem(
+                        model: model,
+                      ),
                     );
                   } else {
-                    return ShopBookListItem(
-                      model: model,
+                    return GestureDetector(
+                      onTap: () => _logic.jumpToDetail(model.listId.toString()),
+                                          child: ShopBookListItem(
+                        model: model,
+                      ),
                     );
                   }
                 },

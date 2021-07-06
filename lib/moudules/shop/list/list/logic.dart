@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/common/model/tab_model.dart';
 import 'package:flutter_dingdian/moudules/shop/list/api/repository.dart';
+import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_list_refresher_controller.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_mixin.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,7 @@ import 'state.dart';
 class ShopBookListLogic extends FunStateListRefresherController {
   final state = ShopBookListState();
   final _repository = Get.put(BookShopBookListRepository());
-  
+
   @override
   FunStateStatus initStatus() => FunStateStatus.idle();
 
@@ -31,6 +32,12 @@ class ShopBookListLogic extends FunStateListRefresherController {
   void changeTab(int index) {
     state.selectModel = state.tabs[index];
     refreshController.requestRefresh(duration: Duration(milliseconds: 200));
+  }
+
+  void jumpToDetail(String bookId) {
+    Get.toNamed(Routes.LISTDETAIL, arguments: {
+      "bookId" : bookId
+    });
   }
 
   _initTabTitles() {

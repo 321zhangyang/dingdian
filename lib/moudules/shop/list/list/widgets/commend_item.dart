@@ -24,7 +24,7 @@ class ShopBookListCommendItem extends StatelessWidget {
                 width: ScreenUtil.getInstance().screenWidth - 30,
                 child: LoadImage(
                   ImageUtils.getNetWorkPath(model?.commendImage ?? ""),
-                  holderImg: "app_placeholder",
+                  holderImg: "bookdan_icondefault_Normal",
                   fit: BoxFit.fill,
                 ),
               ),

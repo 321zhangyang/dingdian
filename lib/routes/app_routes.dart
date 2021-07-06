@@ -10,6 +10,9 @@ class Routes {
   //书城-分类-分类列表
   static const CATEGORYLIST = 'category/list';
 
+  //书城-书单-详情
+  static const LISTDETAIL = 'list/detail';
+
   static const DETAIL = 'book/detail';
   static const DETAILDIRECTORY = 'book/detail/directory';
 }

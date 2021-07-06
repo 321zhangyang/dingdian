@@ -61,6 +61,7 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
                 itemCount: _logic.list.length),
             controller: _logic,
             enablePullUp: true,
+            onEmpty: Text("空的"),
           ))
         ],
       ),

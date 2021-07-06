@@ -5,6 +5,7 @@ import 'package:flutter_dingdian/moudules/shop/category/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/more/view.dart';
 import 'package:flutter_dingdian/moudules/detail/detail/view.dart';
+import 'package:flutter_dingdian/moudules/shop/list/detail/view.dart';
 import 'package:flutter_dingdian/moudules/tabbar/tabbar_page.dart';
 import 'package:flutter_dingdian/moudules/theme.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
@@ -36,8 +37,11 @@ abstract class AppPages {
       name: Routes.DETAILDIRECTORY,
       page: () => BookDetailDirectoryPage(),
     ),
+    GetPage(name: Routes.CATEGORYLIST, page: () => ShopCategoryListPage()),
+    
     GetPage(
-      name: Routes.CATEGORYLIST, 
-      page: () => ShopCategoryListPage())
+      name: Routes.LISTDETAIL,
+      page: () => ShopBookListDetailPage(),
+    )
   ];
 }

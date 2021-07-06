@@ -12,6 +12,7 @@ class ShopChooseListItem extends StatelessWidget {
   const ShopChooseListItem({Key? key, this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    print(model?.img ?? "");
     return Container(
       padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
       color: Colors.white,
@@ -56,13 +57,16 @@ class ShopChooseListItem extends StatelessWidget {
                 Text(
                   model?.name ?? "",
                   style: TextStyle(
-                      fontSize: Dimensions.font_sp16,
-                      color: MyColors.text_color,),
+                    fontSize: Dimensions.font_sp16,
+                    color: MyColors.text_color,
+                  ),
                 ),
                 Gaps.vGap8,
                 Text(
                   model?.author ?? "",
-                  style: TextStyle(fontSize: Dimensions.font_sp12,color: MyColors.text_gray_color),
+                  style: TextStyle(
+                      fontSize: Dimensions.font_sp12,
+                      color: MyColors.text_gray_color),
                 ),
                 Gaps.vGap8,
                 Text(
@@ -72,7 +76,7 @@ class ShopChooseListItem extends StatelessWidget {
                       color: MyColors.text_gray_color),
                 ),
                 Gaps.vGap8,
-                 Text(
+                Text(
                   model?.desc ?? "",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
