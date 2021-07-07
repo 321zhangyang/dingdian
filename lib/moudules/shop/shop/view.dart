@@ -10,7 +10,6 @@ import 'package:flutter_dingdian/moudules/shop/list/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/shop/logic.dart';
 import 'package:flutter_dingdian/moudules/shop/top/top/view.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
-import 'package:flutter_dingdian/moudules/mine/theme/theme_logic.dart';
 import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:get/get.dart';
 
@@ -102,6 +101,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
               labelStyle: TextStyle(fontSize: Dimensions.font_sp16),
               controller: _logic.state.controller,
               indicatorSize: TabBarIndicatorSize.label,
+              indicatorColor: MyColors().getThemeColor(),
               onTap: (value) => _logic.changeTab(value),
             ),
           ),

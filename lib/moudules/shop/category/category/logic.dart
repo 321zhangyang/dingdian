@@ -10,7 +10,6 @@ class ShopCategoryLogic extends FunStateActionController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
 
     loadData();

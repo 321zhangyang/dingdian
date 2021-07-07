@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/header.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
@@ -15,7 +14,6 @@ class BookDetailDirectoryLogic extends FunStateActionController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
 
     loadData();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/constants.dart';
-import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:flutter_dingdian/moudules/shop/list/list/widgets/commend_item.dart';
 import 'package:flutter_dingdian/moudules/shop/list/list/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/shop/list/model/list_model.dart';
@@ -35,6 +34,7 @@ class _ShopBookListPageState extends State<ShopBookListPage>
               labelStyle: TextStyle(fontSize: Dimensions.font_sp16),
               controller: _logic.state.controller,
               indicatorSize: TabBarIndicatorSize.label,
+              indicatorColor: MyColors().getThemeColor(),
               onTap: (value) => _logic.changeTab(value),
             ),
           ),
@@ -78,7 +78,6 @@ class _ShopBookListPageState extends State<ShopBookListPage>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _logic.initTabController(this);

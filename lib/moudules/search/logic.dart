@@ -1,6 +1,5 @@
-import 'package:flutter_dingdian/local/local_search_history_repository.dart';
+import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
-import 'package:get/get.dart';
 
 import 'state.dart';
 
@@ -11,10 +10,9 @@ class BookSearchLogic extends FunStateListRefresherController {
   FunStateStatus initStatus() => FunStateStatus.idle();
   @override
   void onInit() async {
-    // TODO: implement onInit
     super.onInit();
 
-    state.historys = await SearchHistoryRepository.getHistory();
+    state.historys = await LocalBookConfigRepository.getHistory();
     print(state.historys);
     update();
   }
@@ -24,8 +22,12 @@ class BookSearchLogic extends FunStateListRefresherController {
     return ["1", "2", "3"];
   }
 
+  saveHistory(String value) {
+     LocalBookConfigRepository.saveHistory(value);
+  }
+
   cleanHistory() {
-    SearchHistoryRepository.clearHistory();
+    LocalBookConfigRepository.clearHistory();
     update();
   }
 }

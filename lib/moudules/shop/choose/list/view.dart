@@ -34,6 +34,7 @@ class _BookChooseListPageState extends State<BookChooseListPage>
             labelStyle: TextStyle(fontSize: Dimensions.font_sp16),
             controller: _logic.state.controller,
             indicatorSize: TabBarIndicatorSize.label,
+            indicatorColor: MyColors().getThemeColor(),
             onTap: (value) => _logic.changeTab(value),
           ),
           Expanded(

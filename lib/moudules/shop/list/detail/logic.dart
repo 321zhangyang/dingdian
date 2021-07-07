@@ -12,7 +12,6 @@ class ShopBookListDetailLogic extends FunStateActionController {
 
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
     loadData();
   }

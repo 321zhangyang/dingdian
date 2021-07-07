@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dingdian/local/local_search_history_repository.dart';
 import 'package:flutter_dingdian/moudules/search/widgets/history_widget.dart';
-import 'package:flutter_dingdian/moudules/search/widgets/list.dart';
 import 'package:flutter_dingdian/moudules/search/widgets/search_bar.dart';
 import 'package:get/get.dart';
 
@@ -21,18 +19,16 @@ class BookSearchPage extends StatelessWidget {
         leading: Container(),
         title: SearchBar(
           onPressed: (value) {
-            print(value);
-            SearchHistoryRepository.saveHistory(value);
+            logic.saveHistory(value);
           },
-          onClose: () {
-            print(SearchHistoryRepository.getHistory());
-          },
+          onClose: () {},
           back: () {
             Get.back();
           },
         ),
       ),
-      body: Container(alignment: Alignment.topCenter,child: SearchHistoryWidget()),
+      body: Container(
+          alignment: Alignment.topCenter, child: SearchHistoryWidget()),
     );
   }
 }

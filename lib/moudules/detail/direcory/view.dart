@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
-import 'package:list_group_handler/list_group_handler.dart';
 
 import 'logic.dart';
 import 'state.dart';

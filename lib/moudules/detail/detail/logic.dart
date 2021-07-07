@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';

@@ -6,7 +6,6 @@ import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:flutter_dingdian/moudules/shop/top/top/widgets/list_item.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'logic.dart';
 import 'state.dart';
@@ -40,6 +39,7 @@ class _ShopTopPageState extends State<ShopTopPage>
                   labelStyle: TextStyle(fontSize: Dimensions.font_sp16),
                   controller: _logic.state.controller,
                   indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: MyColors().getThemeColor(),
                   onTap: (value) => _logic.changeTab(value),
                 ),
               ),

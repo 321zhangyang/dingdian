@@ -34,6 +34,7 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
             labelStyle: TextStyle(fontSize: Dimensions.font_sp16),
             controller: _logic.state.controller,
             indicatorSize: TabBarIndicatorSize.label,
+            indicatorColor: MyColors().getThemeColor(),
             onTap: (value) => _logic.changeTab(value),
           ),
           Expanded(
@@ -70,7 +71,6 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     
     _logic.initTabController(this);

@@ -31,8 +31,7 @@ class ThemePage extends StatelessWidget {
                   return InkWell(
                   
                     onTap: () {
-                      print(value);
-        
+
                       _logic.changeThemeColor(value,key);
                     },
                     child: Container(

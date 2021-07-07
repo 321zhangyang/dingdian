@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/api/repository.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_list_refresher_controller.dart';
-import 'package:fun_flutter_kit/state/src/fun_state_configuration.dart';
 import 'package:get/get.dart';
 import 'state.dart';
 

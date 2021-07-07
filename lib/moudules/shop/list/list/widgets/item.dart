@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
-import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:flutter_dingdian/moudules/shop/list/model/list_model.dart';
 import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';

@@ -1,4 +1,3 @@
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/search/logic.dart';
 import 'package:flutter_dingdian/moudules/search/widgets/list_item.dart';

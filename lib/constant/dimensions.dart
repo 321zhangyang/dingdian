@@ -1,7 +1,4 @@
 
-//设置常见的一些尺寸 
-import 'package:flustars/flustars.dart';
-
 class Dimensions {
   static const double font_sp10 = 10.0;
   static const double font_sp12 = 12.0;

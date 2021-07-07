@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dingdian/network/net_config.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;

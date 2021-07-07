@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_dingdian/moudules/shop/choose/api/repository.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/banner_model.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/choose_model.dart';
@@ -19,7 +17,6 @@ class ShopChooseLogic extends FunStateActionController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
 
     getdata();

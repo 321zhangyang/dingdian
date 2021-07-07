@@ -116,7 +116,6 @@ class ExpandableTextState extends State<TQExpandableText> {
           locale: locale,
         );
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
-        final linkSize = textPainter.size;
         final linkWidth = textPainter.width;
         textPainter.text = text;
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);

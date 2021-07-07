@@ -22,7 +22,6 @@ class ShopTopLogic extends FunStateListRefresherController {
 
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
 
     refreshController.requestRefresh(duration: Duration(milliseconds: 200));

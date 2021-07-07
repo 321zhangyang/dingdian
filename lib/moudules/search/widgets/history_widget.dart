@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/constants.dart';
-import 'package:flutter_dingdian/local/local_search_history_repository.dart';
 import 'package:flutter_dingdian/moudules/search/logic.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';

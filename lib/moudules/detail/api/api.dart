@@ -1,4 +1,4 @@
-import 'package:flutter_dingdian/moudules/detail/direcory/logic.dart';
+
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/network/net_constant.dart';

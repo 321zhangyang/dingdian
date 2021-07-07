@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
-import 'package:flutter_dingdian/moudules/detail/api/api.dart';
 import 'package:flutter_dingdian/moudules/detail/detail/logic.dart';
 import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';

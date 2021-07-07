@@ -1,9 +1,6 @@
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
-import 'package:flutter_dingdian/moudules/mine/theme/theme_logic.dart';
 import 'package:flutter_dingdian/moudules/tabbar/widgets/tabbar_item.dart';
-import 'package:get/get.dart';
 
 
 

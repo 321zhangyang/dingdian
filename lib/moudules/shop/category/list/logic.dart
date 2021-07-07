@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dingdian/moudules/shop/category/api/api.dart';
 import 'package:flutter_dingdian/moudules/shop/category/api/repository.dart';
 import 'package:flutter_dingdian/moudules/shop/category/model/category_model.dart';
-import 'package:flutter_dingdian/moudules/shop/choose/api/repository.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_list_refresher_controller.dart';
@@ -58,7 +56,6 @@ class ShopCategoryListLogic extends FunStateListRefresherController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
   }
 }
