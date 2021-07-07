@@ -9,7 +9,8 @@ import 'package:flutter_dingdian/moudules/shop/choose/choose/view.dart';
 import 'package:flutter_dingdian/moudules/shop/list/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/shop/logic.dart';
 import 'package:flutter_dingdian/moudules/shop/top/top/view.dart';
-import 'package:flutter_dingdian/theme/theme_logic.dart';
+import 'package:flutter_dingdian/routes/app_routes.dart';
+import 'package:flutter_dingdian/moudules/mine/theme/theme_logic.dart';
 import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:get/get.dart';
 
@@ -30,7 +31,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
             itemWidth: ScreenUtil.getInstance().getSp(70),
             itemHeight: ScreenUtil.getInstance().getSp(35),
             selectedColor: Colors.white,
-            defaultColor: Get.find<ThemeLogic>().state.themeColor,
+            defaultColor: MyColors().getThemeColor(),
             onSelectChanged: (position) {}),
         leadingWidth: ScreenUtil.getInstance().getSp(80),
         leading: Container(
@@ -69,20 +70,23 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
           ),
         ),
         actions: [
-          Container(
-            width: ScreenUtil.getInstance().getSp(80),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                XXMyIconBtn(
-                  iconSting: "search_btn_Normal",
-                  width: ScreenUtil.getInstance().getSp(25),
-                  height: ScreenUtil.getInstance().getSp(25),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-              ],
+          GestureDetector(
+            onTap: () => Get.toNamed(Routes.SEARCH),
+                      child: Container(
+              width: ScreenUtil.getInstance().getSp(80),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  XXMyIconBtn(
+                    iconSting: "search_btn_Normal",
+                    width: ScreenUtil.getInstance().getSp(25),
+                    height: ScreenUtil.getInstance().getSp(25),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                ],
+              ),
             ),
           )
         ],

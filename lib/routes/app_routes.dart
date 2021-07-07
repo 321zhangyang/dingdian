@@ -15,4 +15,8 @@ class Routes {
 
   static const DETAIL = 'book/detail';
   static const DETAILDIRECTORY = 'book/detail/directory';
+
+  //搜索
+  static const SEARCH = 'search';
+  
 }

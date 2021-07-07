@@ -6,7 +6,8 @@ import 'theme_state.dart';
 class ThemeLogic extends GetxController {
   final state = ThemeState();
 
-  changeThemeColor(Color color) {
+  changeThemeColor(Color color, String key) {
+    state.colorKey = key;
     state.themeColor = color;
     update();
   }

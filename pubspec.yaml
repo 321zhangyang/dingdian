@@ -53,6 +53,9 @@ dependencies:
   list_group_handler:
     git:
       url: https://gitee.com/zeng_li_zhi/ListViewGroupHandler.git
+  # 本地存储
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

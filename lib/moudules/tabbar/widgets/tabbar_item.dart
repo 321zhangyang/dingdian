@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dingdian/moudules/mine.dart';
+import 'package:flutter_dingdian/moudules/mine/mine/view.dart';
 import 'package:flutter_dingdian/moudules/shop/shop/view.dart';
 
 

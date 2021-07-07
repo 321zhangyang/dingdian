@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dingdian/moudules/mine/theme/theme_logic.dart';
 import 'package:flutter_dingdian/routes/app_pages.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
-import 'package:flutter_dingdian/theme/theme_logic.dart';
 import 'package:flutter_dingdian/utils/dependency_injection.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fun_flutter_kit/state/src/fun_state_configuration.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   await DenpendencyInjection.init();
+  await Hive.initFlutter();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(GetBuilder<ThemeLogic>(
     init: ThemeLogic(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dingdian/theme/theme_logic.dart';
+import 'package:flutter_dingdian/moudules/mine/theme/theme_logic.dart';
 import 'package:get/get.dart';
 
 //颜色常量 配置App中常用颜色 方便统一管理

@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/view.dart';
-import 'package:flutter_dingdian/moudules/shop/category/api/api.dart';
+import 'package:flutter_dingdian/moudules/mine/theme/theme_view.dart';
+import 'package:flutter_dingdian/moudules/search/view.dart';
 import 'package:flutter_dingdian/moudules/shop/category/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/more/view.dart';
 import 'package:flutter_dingdian/moudules/detail/detail/view.dart';
 import 'package:flutter_dingdian/moudules/shop/list/detail/view.dart';
 import 'package:flutter_dingdian/moudules/tabbar/tabbar_page.dart';
-import 'package:flutter_dingdian/moudules/theme.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:get/route_manager.dart';
 
@@ -19,7 +18,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: Routes.THEME,
-      page: () => ThemeSetPage(),
+      page: () => ThemePage(),
     ),
     GetPage(
       name: Routes.CHOOSELIST,
@@ -38,10 +37,13 @@ abstract class AppPages {
       page: () => BookDetailDirectoryPage(),
     ),
     GetPage(name: Routes.CATEGORYLIST, page: () => ShopCategoryListPage()),
-    
     GetPage(
       name: Routes.LISTDETAIL,
       page: () => ShopBookListDetailPage(),
+    ),
+    GetPage(
+      name: Routes.SEARCH,
+      page: () => BookSearchPage(),
     )
   ];
 }
