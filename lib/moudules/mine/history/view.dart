@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/constants.dart';
 import 'package:flutter_dingdian/moudules/common/widgets/segment/segment.dart';
 import 'package:flutter_dingdian/moudules/mine/history/widgets/item.dart';
+import 'package:flutter_dingdian/utils/image/load_image.dart';
 
 import 'package:fun_flutter_kit/state/src/controller/fun_state_obx.dart';
 import 'package:get/get.dart';
@@ -25,12 +26,18 @@ class MineReadHistoryPage extends StatelessWidget {
             selectedColor: Colors.white,
             defaultColor: MyColors().getThemeColor(),
             onSelectChanged: (position) {}),
-            actions: [
-        Container(
-          width: 56,
-          height: 10,
-        )
-      ],
+        actions: [
+          GestureDetector(
+            onTap: () {
+              _logic.cleanReadHistory();
+            },
+            child: Container(
+              width: 56,
+              height: 10,
+              child: LoadAssetImage("bs_lmenu_del_Normal"),
+            ),
+          )
+        ],
       ),
       body: FunStateObx(
         controller: _logic,
@@ -38,7 +45,11 @@ class MineReadHistoryPage extends StatelessWidget {
           return Container(
               child: ListView.separated(
                   itemBuilder: (context, index) {
-                    return MineReadHistoryListItem(model: _logic.state.list[index]);
+                    return GestureDetector(
+                      onTap: ()=> _logic.jumpToDetail(_logic.state.list[index].id.toString()),
+                      child: MineReadHistoryListItem(
+                          model: _logic.state.list[index]),
+                    );
                   },
                   separatorBuilder: (context, index) {
                     return Divider(
