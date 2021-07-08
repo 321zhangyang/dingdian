@@ -50,11 +50,10 @@ class LocalBookConfigRepository {
     if (historys == null) {
       historys = [];
     } else {
-      int index;
       for (var i = 0; i < historys.length; i++) {
         BookDetailInfoModel item = historys[i];
         if (item.id == model.id) {
-          index = i;
+          historys.removeAt(i);
         }
       }
     }
