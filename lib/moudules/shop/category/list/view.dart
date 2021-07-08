@@ -23,6 +23,7 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text(_logic.state.model?.name ?? ""),
       ),
       body: Column(

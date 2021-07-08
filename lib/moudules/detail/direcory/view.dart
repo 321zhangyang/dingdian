@@ -26,6 +26,7 @@ class _BookDetailDirectoryPageState extends State<BookDetailDirectoryPage> {
         return Scaffold(
             appBar: AppBar(
               title: Text(Get.arguments["title"]),
+              elevation: 0,
               actions: [
                 GestureDetector(
                   onTap: () {

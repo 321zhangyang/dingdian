@@ -35,6 +35,6 @@ class NetBaseApi {
     "info" : "https://infosxs.pysmei.com",
     "content" : "https://contentxs.pysmei.com",
     "search" : "https://souxs.leeyegy.com/search.aspx/",
-    "user" : "https://userxs.pigqq.com"
+    "user" : "https://userxs.pigqq.com",
   };
 }

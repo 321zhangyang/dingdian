@@ -18,5 +18,7 @@ class Routes {
 
   //搜索
   static const SEARCH = 'search';
-  
+
+  //我的
+  static const READHISTORY = 'mine/history';
 }

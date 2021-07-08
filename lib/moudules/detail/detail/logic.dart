@@ -1,3 +1,4 @@
+import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
@@ -28,6 +29,18 @@ class BookDetailLogic extends FunStateActionController {
     loadData();
   }
 
+  //直接阅读
+  readBook(BookDetailInfoModel model) {
+    //添加历史阅读记录
+    LocalBookConfigRepository.saveBookReadHistroy(model);
+  }
+
+  //添加图书到书架
+  addBookToShelf(BookDetailInfoModel model) {
+     LocalBookConfigRepository.saveBookReadHistroy(model);
+  }
+
+  //展示或者收起作者还写过
   showSameUser() {
     state.showAllUser = !state.showAllUser!;
     update();
@@ -49,7 +62,9 @@ class BookDetailLogic extends FunStateActionController {
   Future onLoadData() async {
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
     String bookId = Get.arguments["bookId"];
-    int index = bookId.length > 3 ?  int.parse(bookId.substring(0, bookId.length - 3)) + 1 : 1;
+    int index = bookId.length > 3
+        ? int.parse(bookId.substring(0, bookId.length - 3)) + 1
+        : 1;
     String url = "$index/$bookId/info.html";
     BookDetailInfoModel model = await _repository.getChoose(url);
     state.model = model;

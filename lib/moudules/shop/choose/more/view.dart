@@ -15,6 +15,7 @@ class ShopChooseMorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text(Get.arguments["title"]),
         ),
         body: FunStateRefresherObx(

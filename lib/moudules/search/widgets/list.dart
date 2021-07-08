@@ -6,22 +6,23 @@ import 'package:get/get.dart';
 
 class BookSearchResultListWidget extends StatelessWidget {
   BookSearchResultListWidget({Key? key}) : super(key: key);
-  final BookSearchLogic logic = Get.put(BookSearchLogic());
+  final BookSearchLogic _logic = Get.put(BookSearchLogic());
   @override
   Widget build(BuildContext context) {
     return Container(
       child: FunStateRefresherObx(
-        controller: logic,
+        controller: _logic,
+        enablePullUp: true,
         builder: () {
           return ListView.separated(
             shrinkWrap: true,
               itemBuilder: (context, index) {
-                return BookSearchResultListItem();
+                return BookSearchResultListItem(model: _logic.list[index],);
               },
               separatorBuilder: (context, index) {
                 return Divider(height: 0.5,);
               },
-              itemCount: 10);
+              itemCount: _logic.list.length);
         },
       ),
     );

@@ -72,6 +72,9 @@ class MinePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                           onTap: () {
+                             if (index == 2) {
+                              Get.toNamed(Routes.READHISTORY);
+                            }
                             if (index == 7) {
                               Get.toNamed(Routes.THEME);
                             }

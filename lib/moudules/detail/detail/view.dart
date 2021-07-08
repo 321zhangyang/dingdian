@@ -76,7 +76,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
               Opacity(
                   opacity: _logic.state.alpha, //滑动offset改变透明度
                   child: Container(
-                    child: AppBar(),
+                    child: AppBar(
+                      title: Text(_logic.state.model?.name ?? ""),
+                    ),
                     height: ScreenUtil.getInstance().appBarHeight +
                         ScreenUtil.getInstance().statusBarHeight,
                     color: MyColors().getThemeColor(),
@@ -86,30 +88,36 @@ class _BookDetailPageState extends State<BookDetailPage> {
                 child: Container(
                   child: Row(
                     children: [
-                      Container(
-                        alignment: Alignment.center,
-                        width: ScreenUtil.getInstance().screenWidth / 2,
-                        height: ScreenUtil.getInstance().bottomBarHeight + 40,
-                        color: Colors.white,
-                        child: Text(
-                          "移除书架",
-                          style: TextStyle(
-                              fontSize: Dimensions.font_sp16,
-                              color: Color.fromRGBO(252, 53, 71, 1),
-                              fontWeight: FontWeight.bold),
+                      GestureDetector(
+                        onTap: () => _logic.addBookToShelf(_logic.state.model!),
+                                              child: Container(
+                          alignment: Alignment.center,
+                          width: ScreenUtil.getInstance().screenWidth / 2,
+                          height: ScreenUtil.getInstance().bottomBarHeight + 40,
+                          color: Colors.white,
+                          child: Text(
+                            "移除书架",
+                            style: TextStyle(
+                                fontSize: Dimensions.font_sp16,
+                                color: Color.fromRGBO(252, 53, 71, 1),
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        width: ScreenUtil.getInstance().screenWidth / 2,
-                        height: ScreenUtil.getInstance().bottomBarHeight + 40,
-                        color: Color.fromRGBO(252, 53, 71, 1),
-                        child: Text(
-                          "立即阅读",
-                          style: TextStyle(
-                              fontSize: Dimensions.font_sp16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                      GestureDetector(
+                        onTap: () => _logic.readBook(_logic.state.model!),
+                                              child: Container(
+                          alignment: Alignment.center,
+                          width: ScreenUtil.getInstance().screenWidth / 2,
+                          height: ScreenUtil.getInstance().bottomBarHeight + 40,
+                          color: Color.fromRGBO(252, 53, 71, 1),
+                          child: Text(
+                            "立即阅读",
+                            style: TextStyle(
+                                fontSize: Dimensions.font_sp16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ],

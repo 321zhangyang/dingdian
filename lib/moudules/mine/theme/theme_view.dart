@@ -1,4 +1,8 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dingdian/constant/colors.dart';
+import 'package:flutter_dingdian/constant/dimensions.dart';
+import 'package:flutter_dingdian/constant/gaps.dart';
 import 'package:get/get.dart';
 
 import 'theme_logic.dart';
@@ -13,30 +17,31 @@ class ThemePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("换肤"),
+      ),
       body: Container(
-        child: ExpansionTile(
-          leading: Icon(Icons.color_lens),
-          title: Text('颜色主题'),
-          initiallyExpanded: false,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: state.themeColorMap.keys.map((key) {
-                  Color value = state.themeColorMap[key]!;
-                  
-                  return InkWell(
-                  
-                    onTap: () {
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 20,top: 20),
+          child: Wrap(
+            spacing: 20,
+            runSpacing: 20,
+            
+            children: state.themeColorMap.keys.map((key) {
+              Color value = state.themeColorMap[key]!;
+              
+              return InkWell(
+              
+                onTap: () {
 
-                      _logic.changeThemeColor(value,key);
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
+                  _logic.changeThemeColor(value,key);
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      width: (ScreenUtil.getInstance().screenWidth - 60) / 2,
+                      height: 50,
                       color: value,
                       child: state.colorKey == key
                           ? Icon(
@@ -45,11 +50,13 @@ class ThemePage extends StatelessWidget {
                             )
                           : null,
                     ),
-                  );
-                }).toList(),
-              ),
-            )
-          ],
+                    Gaps.vGap10,
+                    Text(key,style: TextStyle(fontSize: Dimensions.font_sp16,color: MyColors.text_color),)
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );

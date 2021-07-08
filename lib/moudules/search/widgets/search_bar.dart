@@ -5,7 +5,8 @@ class SearchBar extends StatefulWidget {
       {Key? key,
       required this.onPressed,
       required this.onClose,
-      this.back,
+      required this.back,
+      required this.controller,
       this.hintText = "请输入搜索内容",
       this.fontSize = 16,
       this.textColor = Colors.black,
@@ -13,6 +14,7 @@ class SearchBar extends StatefulWidget {
       : super(key: key);
   final Function(String) onPressed;
   final Function() onClose;
+  final TextEditingController controller;
   final Function()? back;
   final String? hintText;
   final double? fontSize;
@@ -23,7 +25,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  final TextEditingController _controller = TextEditingController();
+
   late Function() _back;
 
   @override
@@ -42,10 +44,9 @@ class _SearchBarState extends State<SearchBar> {
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color.fromRGBO(240, 240, 240, 1)),
+                  borderRadius: BorderRadius.circular(20), color: Colors.white),
               child: TextField(
-                  controller: _controller,
+                  controller: widget.controller,
                   focusNode: FocusNode(),
                   style: TextStyle(
                       fontSize: widget.fontSize,
@@ -101,7 +102,7 @@ class _SearchBarState extends State<SearchBar> {
                           fontSize: widget.fontSize, color: widget.hintColor),
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          _controller.text = "";
+                          widget.controller.text = "";
                           widget.onClose();
                         },
                         child: Container(

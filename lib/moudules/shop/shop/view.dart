@@ -25,6 +25,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: SegmentBar(
             titleNames: _logic.state.titles,
             itemWidth: ScreenUtil.getInstance().getSp(70),

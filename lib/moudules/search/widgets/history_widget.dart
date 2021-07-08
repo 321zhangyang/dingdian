@@ -8,9 +8,6 @@ class SearchHistoryWidget extends StatelessWidget {
   final BookSearchLogic _logic = Get.find<BookSearchLogic>();
   @override
   Widget build(BuildContext context) {
-    return FunStateObx(
-      controller: _logic,
-      builder: () {
         return _logic.state.historys.length > 0 ? Container(
           padding: EdgeInsets.fromLTRB(15, 10, 10, 10),
           child: Column(
@@ -43,7 +40,7 @@ class SearchHistoryWidget extends StatelessWidget {
                   children:
                       List.generate(_logic.state.historys.length, (index) {
                     return GestureDetector(
-                      onTap: () => null,
+                      onTap: () => _logic.search(_logic.state.historys[index]),
                       child: Container(
                         height: 35,
                         padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
@@ -62,7 +59,5 @@ class SearchHistoryWidget extends StatelessWidget {
             ],
           ),
         ) : Container();
-      },
-    );
   }
 }

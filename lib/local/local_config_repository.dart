@@ -1,13 +1,15 @@
+import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:hive/hive.dart';
 
 class LocalBookConfigRepository {
-  static final String keyHistory = "search_history";
+  static final String searhHistory = "search_history";
   static final String keyTheme = "theme";
+  static final String readHistory = "book_history";
 
   // 搜索页面记录本地方法
-  static saveHistory(String value) async {
+  static saveSearchHistory(String value) async {
     var box = await Hive.openBox("book");
-    List<String>? historys = box.get(keyHistory);
+    List<String>? historys = box.get(searhHistory);
     if (historys == null) {
       historys = [];
     }
@@ -15,20 +17,21 @@ class LocalBookConfigRepository {
       historys.remove(value);
     }
     historys.add(value);
-    box.put(keyHistory, historys);
+    box.put(searhHistory, historys);
   }
 
-  static Future<List> getHistory() async {
+  static Future<List> getSearchHistory() async {
     var box = await Hive.openBox("book");
-    List? history = box.get(keyHistory);
+    List? history = box.get(searhHistory);
     return history ?? [];
   }
 
-  static clearHistory() async {
+  static clearSearchHistory() async {
     var box = await Hive.openBox("book");
-    box.delete(keyHistory);
+    box.delete(searhHistory);
   }
 
+  //主题本地化操作
   static saveTheme(String value) async {
     var box = await Hive.openBox("book");
     box.put(keyTheme, value);
@@ -38,5 +41,30 @@ class LocalBookConfigRepository {
     var box = await Hive.openBox("book");
     String? themeKey = box.get(keyTheme) ?? "经典蓝";
     return themeKey;
+  }
+
+  //图书查看历史
+  static saveBookReadHistroy(BookDetailInfoModel model) async {
+    var box = await Hive.openBox("book");
+    List? historys = box.get(readHistory);
+    if (historys == null) {
+      historys = [];
+    } else {
+      int index;
+      for (var i = 0; i < historys.length; i++) {
+        BookDetailInfoModel item = historys[i];
+        if (item.id == model.id) {
+          index = i;
+        }
+      }
+    }
+    historys.add(model);
+    print(historys);
+    box.put(readHistory, historys);
+  }
+
+  static getBookReadHistroy() async {
+    var box = await Hive.openBox("book");
+    return box.get(readHistory) ?? [];
   }
 }
