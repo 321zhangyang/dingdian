@@ -33,11 +33,13 @@ class BookDetailLogic extends FunStateActionController {
   readBook(BookDetailInfoModel model) {
     //添加历史阅读记录
     LocalBookConfigRepository.saveBookReadHistroy(model);
+    //跳转阅读
+    Get.toNamed(Routes.READ, arguments: {"bookId": model.id.toString()});
   }
 
   //添加图书到书架
   addBookToShelf(BookDetailInfoModel model) {
-     LocalBookConfigRepository.saveBookReadHistroy(model);
+    LocalBookConfigRepository.saveBookReadHistroy(model);
   }
 
   //展示或者收起作者还写过

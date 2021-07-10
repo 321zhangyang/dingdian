@@ -1,6 +1,7 @@
 import 'package:flutter_dingdian/moudules/detail/direcory/view.dart';
 import 'package:flutter_dingdian/moudules/mine/history/view.dart';
 import 'package:flutter_dingdian/moudules/mine/theme/theme_view.dart';
+import 'package:flutter_dingdian/moudules/read/view.dart';
 import 'package:flutter_dingdian/moudules/search/view.dart';
 import 'package:flutter_dingdian/moudules/shop/category/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/list/view.dart';
@@ -46,11 +47,13 @@ abstract class AppPages {
       name: Routes.SEARCH,
       page: () => BookSearchPage(),
     ),
-    
     GetPage(
       name: Routes.READHISTORY,
       page: () => MineReadHistoryPage(),
     ),
-
+    GetPage(
+      name: Routes.READ,
+      page: () => BookReadPage(),
+    )
   ];
 }

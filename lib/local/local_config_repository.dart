@@ -57,7 +57,7 @@ class LocalBookConfigRepository {
         }
       }
     }
-    historys.add(model);
+    historys.insert(0, model);
     print(historys);
     box.put(readHistory, historys);
   }
@@ -65,5 +65,10 @@ class LocalBookConfigRepository {
   static getBookReadHistroy() async {
     var box = await Hive.openBox("book");
     return box.get(readHistory) ?? [];
+  }
+
+  static deleteBookReadHistory() async {
+    var box = await Hive.openBox("book");
+    box.delete(readHistory);
   }
 }

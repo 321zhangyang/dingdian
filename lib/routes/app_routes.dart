@@ -21,4 +21,7 @@ class Routes {
 
   //我的
   static const READHISTORY = 'mine/history';
+
+  //阅读
+  static const READ = 'book/read';
 }

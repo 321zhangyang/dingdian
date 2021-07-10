@@ -47,7 +47,7 @@ class BookDetailSameCategoryWidget extends StatelessWidget {
             mainAxisSpacing: 0,
             crossAxisSpacing: 30,
             childAspectRatio: 0.55),
-        itemCount: 6,
+        itemCount: _logic.state.model!.sameCategoryBooks!.length,
         itemBuilder: (context, index) {
           SameCategoryBooks books =
               _logic.state.model!.sameCategoryBooks![index];

@@ -102,6 +102,7 @@ class TextComposition {
     this.debug = false,
     List<TextPage>? pages,
     this.showAnimation = true,
+    justRender,
     // this.linkPattern,
     // this.linkStyle,
     // this.linkText,
@@ -135,9 +136,11 @@ class TextComposition {
     if (title != null && title!.isNotEmpty) {
       String t = title!;
       while (true) {
-        tp.text = TextSpan(text: title, style: titleStyle);
+        tp.text = TextSpan(text: t, style: titleStyle);
         tp.layout(maxWidth: _width);
         final textCount = tp.getPositionForOffset(offset).offset;
+        print(t);
+        print(textCount);
         final text = t.substring(0, textCount);
         double? spacing;
         if (tp.width > _width2) {
@@ -151,9 +154,12 @@ class TextComposition {
         lines.add(TextLine(text, dx, dy, spacing, true));
         dy += tp.height;
         if (t.length == textCount) {
+          print("嘿嘿额嘿嘿");
           break;
         } else {
+          print("哈哈哈哈");
           t = t.substring(textCount);
+          print("t $t");
         }
       }
     }
