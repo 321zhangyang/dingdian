@@ -2,6 +2,9 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/constants.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/bottom.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/directory.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/offstage.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
@@ -15,24 +18,28 @@ class BookReadPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: FunStateObx(
-          controller: logic,
-          builder: () {
-            int itemCount = state.cContentModel!.pages!.length +
-                (state.pContentModel != null
-                    ? state.pContentModel!.pages!.length
-                    : 0) +
-                (state.nContentModel != null
-                    ? state.nContentModel!.pages!.length
-                    : 0);
-            print("itemCount$itemCount");
-            return Container(
+    return FunStateObx(
+      controller: logic,
+      builder: () {
+        int itemCount = state.cContentModel!.pages!.length +
+            (state.pContentModel != null
+                ? state.pContentModel!.pages!.length
+                : 0) +
+            (state.nContentModel != null
+                ? state.nContentModel!.pages!.length
+                : 0);
+        return Scaffold(
+            backgroundColor: Colors.white,
+            key: logic.state.readKey,
+            drawer: Drawer(
+              child: ReadDirectoryWidget(),
+            ),
+            body: Container(
               child: Stack(
                 children: [
                   Positioned(
                       child: GestureDetector(
+                        onTap: () => logic.showMenu(),
                     child: PageView.builder(
                       physics: BouncingScrollPhysics(),
                       controller: state.pageController,
@@ -117,11 +124,15 @@ class BookReadPage extends StatelessWidget {
                         );
                       },
                     ),
-                  ))
+                  )),
+                   Offstage(
+                  offstage: logic.state.offstage,
+                  child: ReadOffstageWidget()
+                )
                 ],
               ),
-            );
-          },
-        ));
+            ));
+      },
+    );
   }
 }
