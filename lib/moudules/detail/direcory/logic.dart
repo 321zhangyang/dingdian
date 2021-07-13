@@ -52,6 +52,7 @@ class BookDetailDirectoryLogic extends FunStateActionController {
       //indexPath: IndexPath(section,row,index)
       cellForRowAtIndexPath: (indexPath) => BookDirectoryItemWidget(
         item: state.model!.list![indexPath.section].list![indexPath.row],
+        select: false,
       ),
       //头部
       headerForSection: (section) => BookDirectoryHeaderWidget(

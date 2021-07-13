@@ -139,8 +139,6 @@ class TextComposition {
         tp.text = TextSpan(text: t, style: titleStyle);
         tp.layout(maxWidth: _width);
         final textCount = tp.getPositionForOffset(offset).offset;
-        print(t);
-        print(textCount);
         final text = t.substring(0, textCount);
         double? spacing;
         if (tp.width > _width2) {
@@ -154,12 +152,9 @@ class TextComposition {
         lines.add(TextLine(text, dx, dy, spacing, true));
         dy += tp.height;
         if (t.length == textCount) {
-          print("嘿嘿额嘿嘿");
           break;
         } else {
-          print("哈哈哈哈");
           t = t.substring(textCount);
-          print("t $t");
         }
       }
     }
@@ -299,7 +294,6 @@ class PagePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(PagePainter old) {
-    print("shouldRepaint");
     return old.pageIndex != pageIndex;
   }
 }

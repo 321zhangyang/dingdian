@@ -1,11 +1,12 @@
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
+import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:hive/hive.dart';
 
 class LocalBookConfigRepository {
   static final String searhHistory = "search_history";
   static final String keyTheme = "theme";
   static final String readHistory = "book_history";
-
+  static final String readConfig = "read_config";
   // 搜索页面记录本地方法
   static saveSearchHistory(String value) async {
     var box = await Hive.openBox("book");
@@ -58,7 +59,6 @@ class LocalBookConfigRepository {
       }
     }
     historys.insert(0, model);
-    print(historys);
     box.put(readHistory, historys);
   }
 
@@ -70,5 +70,19 @@ class LocalBookConfigRepository {
   static deleteBookReadHistory() async {
     var box = await Hive.openBox("book");
     box.delete(readHistory);
+  }
+
+  //图书阅读页面配置本地存储
+  //保存配置
+  static saveBookReadConfig(BookReadConfigModel model) async {
+    var box = await Hive.openBox("book");
+    box.put(readConfig, model);
+  }
+
+  //获取配置
+static getBookReadConfigModel() async{
+    var box = await Hive.openBox("book");
+    var readConfigModel = box.get(readConfig);
+    return readConfigModel == null ? null : readConfigModel;
   }
 }

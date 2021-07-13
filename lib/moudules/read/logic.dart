@@ -1,11 +1,13 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
+import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/header.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/read/api/repository.dart';
+import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
@@ -18,7 +20,7 @@ class BookReadLogic extends FunStateActionController {
   final state = BookReadState();
   final _chapterRepository = Get.put(BookDetailInfoRepository());
   final _contentRepository = Get.put(BookReadRepository());
-  
+
   //获取所有章节
   getBookChapters() async {
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
@@ -35,7 +37,6 @@ class BookReadLogic extends FunStateActionController {
     }
     resetContent(0);
   }
-  
 
   //重置内容
   resetContent(int index) async {
@@ -62,7 +63,7 @@ class BookReadLogic extends FunStateActionController {
     update();
     _initGroupHandler();
   }
-  
+
   //获取章节内容
   Future<BookChapterContentModel> getBookChapterContent(
       String chapterId) async {
@@ -80,7 +81,7 @@ class BookReadLogic extends FunStateActionController {
     return model;
   }
 
- //对章节内容机型解析
+  //对章节内容机型解析
   List<TextPage> parseContent(String content, String title,
       {shouldJustifyHeight = true, justRender = false}) {
     TextComposition textComposition = TextComposition(
@@ -100,7 +101,7 @@ class BookReadLogic extends FunStateActionController {
                 ScreenUtil.getInstance().bottomBarHeight));
     return textComposition.pages;
   }
-  
+
   //滚动判断
   onScroll() async {
     var page =
@@ -142,10 +143,19 @@ class BookReadLogic extends FunStateActionController {
     }
   }
 
+  // -------- 菜单操作 ---------
+
+  //展示隐藏菜单
+  showMenu() {
+    state.offstage = !state.offstage;
+    update();
+  }
+
   //展示目录
   showDirectory(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
+
   //对目录进行排序
   sortTheDirectory() {
     state.positive = !state.positive;
@@ -156,20 +166,84 @@ class BookReadLogic extends FunStateActionController {
     update();
   }
 
-  showMenu() {
-    state.offstage = !state.offstage;
+  //切换字体大小
+  changeFont(bool reduce) {
+    if (reduce) {
+      state.configModel!.font =
+          state.configModel!.font! - 1 < 15 ? 15 : state.configModel!.font! - 1;
+    } else {
+      state.configModel!.font =
+          state.configModel!.font! + 1 > 30 ? 30 : state.configModel!.font! + 1;
+    }
+    state.configModel!.save();
+    changeTextContent();
+  }
+
+  changeHeight(bool reduce) {
+    if (reduce) {
+      state.configModel!.height = state.configModel!.height! - 0.1 < 1
+          ? 1
+          : state.configModel!.height! - 0.1;
+    } else {
+      state.configModel!.height = state.configModel!.height! + 0.1 > 5
+          ? 5
+          : state.configModel!.height! + 0.1;
+    }
+    state.configModel!.save();
+    changeTextContent();
+  }
+
+  //更改完成设置后,重新处理文字内容
+  changeTextContent() {
+    state.contentStyle = TextStyle(
+        fontSize: state.configModel!.font!.toDouble(),
+        color: MyColors.text_color,
+        height: state.configModel!.height);
+    print("state.configModel!.height ${state.configModel!.height}");
+    state.cContentModel!.pages = parseContent(
+        state.cContentModel!.content!, state.cContentModel!.cname!);
+    if (state.pContentModel != null) {
+      state.pContentModel!.pages = parseContent(
+          state.pContentModel!.content!, state.pContentModel!.cname!);
+    }
+    if (state.nContentModel != null) {
+      state.nContentModel!.pages = parseContent(
+          state.nContentModel!.content!, state.nContentModel!.cname!);
+    }
+    update();
+  }
+   
+  //切换主题
+  changeTheme(String theme) async {
+    state.configModel!.theme = theme;
+    state.configModel!.save();
     update();
   }
 
-
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     state.pageController.addListener(onScroll);
+
+    var configModel = await LocalBookConfigRepository.getBookReadConfigModel();
+    if (configModel == null) {
+      BookReadConfigModel model = BookReadConfigModel();
+      model.font = 20;
+      model.height = 1.5;
+      model.index = 0;
+      model.theme = "theme2_read_bg";
+      LocalBookConfigRepository.saveBookReadConfig(model);
+      state.configModel = model;
+    } else {
+      print("有了配置信息");
+      state.configModel = configModel;
+    }
     state.titleStyle = TextStyle(
         fontSize: 30, color: MyColors.text_color, fontWeight: FontWeight.bold);
-    state.contentStyle =
-        TextStyle(fontSize: 20, color: MyColors.text_color, height: 1.7);
+    state.contentStyle = TextStyle(
+        fontSize: state.configModel!.font!.toDouble(),
+        color: MyColors.text_color,
+        height: state.configModel!.height);
     getBookChapters();
   }
 
@@ -178,7 +252,7 @@ class BookReadLogic extends FunStateActionController {
     return getBookChapters();
   }
 
- //初始化章节内容的Handler
+  //初始化章节内容的Handler
   _initGroupHandler() {
     state.groupHandler = ListViewGroupHandler(
       //日志开关

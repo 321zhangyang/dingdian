@@ -5,6 +5,7 @@ import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/bottom.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/directory.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/offstage.dart';
+import 'package:flutter_dingdian/utils/image/image_utils.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,7 @@ class BookReadPage extends StatelessWidget {
                 children: [
                   Positioned(
                       child: GestureDetector(
-                        onTap: () => logic.showMenu(),
+                    onTap: () => logic.showMenu(),
                     child: PageView.builder(
                       physics: BouncingScrollPhysics(),
                       controller: state.pageController,
@@ -65,7 +66,12 @@ class BookReadPage extends StatelessWidget {
                         return Container(
                           height: ScreenUtil.getInstance().screenHeight,
                           width: ScreenUtil.getInstance().screenWidth,
-                          decoration: BoxDecoration(color: Colors.white),
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                            image: ExactAssetImage(ImageUtils.getImgPath(
+                                logic.state.configModel!.theme!)),
+                            fit: BoxFit.fill,
+                          )),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -125,10 +131,9 @@ class BookReadPage extends StatelessWidget {
                       },
                     ),
                   )),
-                   Offstage(
-                  offstage: logic.state.offstage,
-                  child: ReadOffstageWidget()
-                )
+                  Offstage(
+                      offstage: logic.state.offstage,
+                      child: ReadOffstageWidget())
                 ],
               ),
             ));
