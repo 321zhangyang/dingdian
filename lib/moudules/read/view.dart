@@ -31,6 +31,7 @@ class BookReadPage extends StatelessWidget {
             return Container(
               child: Stack(
                 children: [
+                 
                   Positioned(
                       child: GestureDetector(
                     child: PageView.builder(
@@ -117,9 +118,42 @@ class BookReadPage extends StatelessWidget {
                         );
                       },
                     ),
-                  ))
+                  )),
+                   Positioned(child: Container(
+                     height: ScreenUtil.getInstance().appBarHeight + ScreenUtil.getInstance().statusBarHeight,
+                     width: ScreenUtil.getInstance().screenWidth,
+                     alignment: Alignment.center,
+                    child: AppBar(
+                      actions: [
+                        Container(
+                          width: 44,
+                          alignment: Alignment.center,
+                          color: Colors.red,
+                          child: Text("下载"),
+                        )
+                      ],
+                    )
+                  )),
+                         Positioned(bottom: 0,child: Container(
+                     height: 100,
+                     width: ScreenUtil.getInstance().screenWidth,
+                     alignment: Alignment.center,
+                     color: Colors.red,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text("上一章"),
+                            Spacer(),
+                            Text("下一章")
+                          ],
+                        )
+                      ],
+                    )
+                  )),
                 ],
               ),
+              
             );
           },
         ));
