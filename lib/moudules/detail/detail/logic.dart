@@ -31,11 +31,11 @@ class BookDetailLogic extends FunStateActionController {
   }
 
   //直接阅读
-  readBook(BookDetailInfoModel model) {
+  readBook() {
     //添加历史阅读记录
-    LocalBookConfigRepository.saveBookReadHistroy(model);
+    LocalBookConfigRepository.saveBookReadHistroy(state.model!);
     //跳转阅读
-    Get.toNamed(Routes.READ, arguments: {"bookId": model.id.toString()});
+    Get.toNamed(Routes.READ, arguments: {"model": state.model});
   }
 
   //添加图书到书架
@@ -82,13 +82,18 @@ class BookDetailLogic extends FunStateActionController {
     if (model.sameUserBooks != null) {
       state.showAllUser = model.sameUserBooks!.length > 3 ? false : true;
     }
+    var book = await DbHelper.instance.getBook(model.id!);
     //判断是否加入过书架
-    if (await DbHelper.instance.getBook(model.id!) != null) {
+    if (book != null) {
+      //书架里有,更新本地数据库
       state.isInShelf = true;
-      print("书架里有");
+      DbHelper.instance.updBook(model.lastChapter ?? "", model.lastTime ?? "",
+          model.lastChapterId ?? 0, model.bookStatus ?? "", model.id!);
+      state.model?.cChapter = book.cChapter;
+      state.model?.cChapterPage = book.cChapterPage;
     } else {
+      //书架没有,不进行操作,从头开始阅读
       state.isInShelf = false;
-      print("书架里没有");
     }
     return model;
   }

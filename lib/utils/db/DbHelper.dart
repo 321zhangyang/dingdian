@@ -103,7 +103,6 @@ class DbHelper {
     var list = await dbClient
         .rawQuery("select * from $_tableName where bookId=?", [bookId]);
     for (Map item in list) {
-      print(item);
       bk.id = item["bookId"];
       bk.name = item["name"];
       bk.author = item["author"];
@@ -128,5 +127,28 @@ class DbHelper {
 
     await dbClient
         .rawDelete('delete from $_tableName where bookId=?', [bookId]);
+  }
+
+  //更新图书信息
+  Future<Null> updBook(String lastChapter, String lastTime, int lastChapterId,
+      String bookStatus, int bookId) async {
+    var dbClient = await db1;
+    dbClient.rawUpdate(
+        "update $_tableName set lastChapter=?,lastTime=?,lastChapterId=?,bookStatus=? where bookId=?",
+        [lastChapter, lastTime, lastChapterId, bookStatus, bookId]);
+    print("更新数据成功");
+  }
+
+  //更新图书阅读信息
+  Future<Null> updBookProcess(
+      int cChapter, int cChapterPage, int bookId) async {
+    var dbClient = await db1;
+    await dbClient.rawUpdate(
+        "update $_tableName set cChapter=?,cChapterPage=? where bookId=?", [
+      cChapter,
+      cChapterPage,
+      bookId,
+    ]);
+    print("更新图书进度成功");
   }
 }

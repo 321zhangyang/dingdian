@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
+import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
 import 'package:list_group_handler/list_group_handler.dart';
 
 class BookReadState {
+  //图书详情
+  BookDetailInfoModel? bookModel;
   // 图书所有章节
   BookDirectoryModel? chapterModel;
   List<TwoList> allChapters = [];

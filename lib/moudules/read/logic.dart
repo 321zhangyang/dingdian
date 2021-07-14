@@ -9,6 +9,7 @@ import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/read/api/repository.dart';
 import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
+import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
@@ -24,7 +25,7 @@ class BookReadLogic extends FunStateActionController {
   //获取所有章节
   getBookChapters() async {
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
-    String bookId = Get.arguments["bookId"].toString();
+    String bookId = state.bookModel!.id.toString();
     int index = int.parse(bookId.substring(0, bookId.length - 3)) + 1;
     String url = "$index/$bookId/index.html";
     BookDirectoryModel model = await _chapterRepository.getBookDirectory(url);
@@ -36,8 +37,8 @@ class BookReadLogic extends FunStateActionController {
       }
     }
     //将章节信息进行存储
-    
-    resetContent(0);
+
+    resetContent(state.bookModel!.cChapter!);
   }
 
   //重置内容
@@ -45,6 +46,9 @@ class BookReadLogic extends FunStateActionController {
     state.cContentModel =
         await getBookChapterContent(state.allChapters[index].id.toString());
     state.cContentModel!.index = index;
+    state.cContentModel!.pageOffsets = state.bookModel!.cChapterPage;
+    print(
+        "state.cContentModel!.pageOffsets ${state.cContentModel!.pageOffsets}");
     if (state.cContentModel!.pid! > 0) {
       state.pContentModel =
           await getBookChapterContent(state.cContentModel!.pid.toString());
@@ -55,22 +59,31 @@ class BookReadLogic extends FunStateActionController {
     if (state.cContentModel!.nid! > 0) {
       state.nContentModel =
           await getBookChapterContent(state.cContentModel!.nid.toString());
-      state.nContentModel!.index = index - 1;
+      state.nContentModel!.index = index + 1;
     } else {
       state.nContentModel = null;
     }
-    if (state.pContentModel != null) {
-      state.pageController.jumpToPage(state.pContentModel!.pages!.length);
-    }
-    update();
-    _initGroupHandler();
+    changeIdle();
+    // update();
+
+    // state.pageController.jumpToPage(state.pContentModel!.pages!.length +
+    //       state.cContentModel!.pageOffsets!);
+
+    // _initGroupHandler();
+  
+    Future.delayed(Duration(milliseconds: 100)).then((value) {
+
+      state.pageController.jumpToPage(state.pContentModel!.pages!.length +
+          state.cContentModel!.pageOffsets!);
+    });
+
   }
 
   //获取章节内容
   Future<BookChapterContentModel> getBookChapterContent(
       String chapterId) async {
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
-    String bookId = Get.arguments["bookId"].toString();
+    String bookId = state.bookModel!.id.toString();
     int path = int.parse(bookId.substring(0, bookId.length - 3)) + 1;
     String url = "/$path/$bookId/$chapterId.html";
     BookChapterContentModel model =
@@ -108,8 +121,10 @@ class BookReadLogic extends FunStateActionController {
   onScroll() async {
     var page =
         state.pageController.offset / ScreenUtil.getInstance().screenWidth;
+    print("page ==== $page");
     int nextArtilePage = state.cContentModel!.pages!.length +
         (state.pContentModel != null ? state.pContentModel!.pages!.length : 0);
+    print("nextArtilePage ==== $nextArtilePage");
     if (page >= nextArtilePage) {
       print("到达下一个章节");
       state.pContentModel = state.cContentModel;
@@ -214,7 +229,7 @@ class BookReadLogic extends FunStateActionController {
     }
     update();
   }
-   
+
   //切换主题
   changeTheme(String theme) async {
     state.configModel!.theme = theme;
@@ -222,11 +237,18 @@ class BookReadLogic extends FunStateActionController {
     update();
   }
 
+  // 状态保存.保存阅读信息
+  saveReadRecord() {
+    DbHelper.instance.updBookProcess(state.cContentModel!.index!,
+        state.cContentModel!.pageOffsets!, state.bookModel!.id!);
+  }
+
   @override
   void onInit() async {
     super.onInit();
+    changeLoading();
     state.pageController.addListener(onScroll);
-
+    state.bookModel = Get.arguments["model"];
     var configModel = await LocalBookConfigRepository.getBookReadConfigModel();
     if (configModel == null) {
       BookReadConfigModel model = BookReadConfigModel();
@@ -237,7 +259,6 @@ class BookReadLogic extends FunStateActionController {
       LocalBookConfigRepository.saveBookReadConfig(model);
       state.configModel = model;
     } else {
-      print("有了配置信息");
       state.configModel = configModel;
     }
     state.titleStyle = TextStyle(
@@ -267,7 +288,6 @@ class BookReadLogic extends FunStateActionController {
       //indexPath: IndexPath(section,row,index)
       cellForRowAtIndexPath: (indexPath) => GestureDetector(
         onTap: () {
-          print("点击目录选择");
           resetContent(indexPath.row);
           Navigator.pop(state.readKey.currentContext!);
         },

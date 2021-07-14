@@ -105,7 +105,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => _logic.readBook(_logic.state.model!),
+                        onTap: () => _logic.readBook(),
                                               child: Container(
                           alignment: Alignment.center,
                           width: ScreenUtil.getInstance().screenWidth / 2,
