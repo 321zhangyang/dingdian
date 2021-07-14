@@ -2,6 +2,7 @@ import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
+import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_action_controller.dart';
 import 'package:get/get.dart';
 
@@ -38,8 +39,16 @@ class BookDetailLogic extends FunStateActionController {
   }
 
   //添加图书到书架
-  addBookToShelf(BookDetailInfoModel model) {
-    LocalBookConfigRepository.saveBookReadHistroy(model);
+  addOrRemoveBookToShelf(BookDetailInfoModel model) async {
+    if (state.isInShelf == false) {
+      await DbHelper.instance.addBooks([model]);
+      state.isInShelf = true;
+    } else {
+      await DbHelper.instance.delBook(model.id!);
+      state.isInShelf = false;
+    }
+    update();
+    //DbHelper.instance.addBooks([model]);
   }
 
   //展示或者收起作者还写过
@@ -72,6 +81,14 @@ class BookDetailLogic extends FunStateActionController {
     state.model = model;
     if (model.sameUserBooks != null) {
       state.showAllUser = model.sameUserBooks!.length > 3 ? false : true;
+    }
+    //判断是否加入过书架
+    if (await DbHelper.instance.getBook(model.id!) != null) {
+      state.isInShelf = true;
+      print("书架里有");
+    } else {
+      state.isInShelf = false;
+      print("书架里没有");
     }
     return model;
   }

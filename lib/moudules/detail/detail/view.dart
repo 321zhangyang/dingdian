@@ -89,14 +89,14 @@ class _BookDetailPageState extends State<BookDetailPage> {
                   child: Row(
                     children: [
                       GestureDetector(
-                        onTap: () => _logic.addBookToShelf(_logic.state.model!),
+                        onTap: () => _logic.addOrRemoveBookToShelf(_logic.state.model!),
                                               child: Container(
                           alignment: Alignment.center,
                           width: ScreenUtil.getInstance().screenWidth / 2,
                           height: ScreenUtil.getInstance().bottomBarHeight + 40,
                           color: Colors.white,
                           child: Text(
-                            "移除书架",
+                            _logic.state.isInShelf == true ? "移除书架" : "加入书架",
                             style: TextStyle(
                                 fontSize: Dimensions.font_sp16,
                                 color: Color.fromRGBO(252, 53, 71, 1),

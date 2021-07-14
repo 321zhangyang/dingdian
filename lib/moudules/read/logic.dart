@@ -35,6 +35,8 @@ class BookReadLogic extends FunStateActionController {
         state.allChapters.add(two);
       }
     }
+    //将章节信息进行存储
+    
     resetContent(0);
   }
 

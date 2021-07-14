@@ -80,7 +80,7 @@ class LocalBookConfigRepository {
   }
 
   //获取配置
-static getBookReadConfigModel() async{
+  static getBookReadConfigModel() async {
     var box = await Hive.openBox("book");
     var readConfigModel = box.get(readConfig);
     return readConfigModel == null ? null : readConfigModel;
