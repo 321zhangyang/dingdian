@@ -2,12 +2,15 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
+import 'package:flutter_dingdian/moudules/detail/direcory/widgets/header.dart';
+import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/read/api/repository.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
+import 'package:list_group_handler/list_group_handler.dart';
 
 import 'state.dart';
 
@@ -15,7 +18,8 @@ class BookReadLogic extends FunStateActionController {
   final state = BookReadState();
   final _chapterRepository = Get.put(BookDetailInfoRepository());
   final _contentRepository = Get.put(BookReadRepository());
-
+  
+  //获取所有章节
   getBookChapters() async {
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
     String bookId = Get.arguments["bookId"].toString();
@@ -29,28 +33,37 @@ class BookReadLogic extends FunStateActionController {
         state.allChapters.add(two);
       }
     }
-    resetContent();
-    update();
+    resetContent(0);
   }
+  
 
-  resetContent() async {
+  //重置内容
+  resetContent(int index) async {
     state.cContentModel =
-        await getBookChapterContent(state.allChapters[0].id.toString());
+        await getBookChapterContent(state.allChapters[index].id.toString());
+    state.cContentModel!.index = index;
     if (state.cContentModel!.pid! > 0) {
       state.pContentModel =
           await getBookChapterContent(state.cContentModel!.pid.toString());
+      state.pContentModel!.index = index - 1;
     } else {
       state.pContentModel = null;
     }
     if (state.cContentModel!.nid! > 0) {
       state.nContentModel =
           await getBookChapterContent(state.cContentModel!.nid.toString());
+      state.nContentModel!.index = index - 1;
     } else {
       state.nContentModel = null;
     }
+    if (state.pContentModel != null) {
+      state.pageController.jumpToPage(state.pContentModel!.pages!.length);
+    }
     update();
+    _initGroupHandler();
   }
-
+  
+  //获取章节内容
   Future<BookChapterContentModel> getBookChapterContent(
       String chapterId) async {
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
@@ -67,6 +80,7 @@ class BookReadLogic extends FunStateActionController {
     return model;
   }
 
+ //对章节内容机型解析
   List<TextPage> parseContent(String content, String title,
       {shouldJustifyHeight = true, justRender = false}) {
     TextComposition textComposition = TextComposition(
@@ -86,7 +100,8 @@ class BookReadLogic extends FunStateActionController {
                 ScreenUtil.getInstance().bottomBarHeight));
     return textComposition.pages;
   }
-
+  
+  //滚动判断
   onScroll() async {
     var page =
         state.pageController.offset / ScreenUtil.getInstance().screenWidth;
@@ -100,6 +115,7 @@ class BookReadLogic extends FunStateActionController {
       if (state.cContentModel!.nid! > 0) {
         state.nContentModel =
             await getBookChapterContent(state.cContentModel!.nid.toString());
+        state.nContentModel!.index = state.cContentModel!.index! + 1;
       } else {
         state.nContentModel = null;
       }
@@ -119,20 +135,39 @@ class BookReadLogic extends FunStateActionController {
         state.pageController.jumpToPage(state.cContentModel!.pages!.length -
             1 +
             state.pContentModel!.pages!.length);
+        state.pContentModel!.index = state.pContentModel!.index! - 1;
       } else {
         state.pContentModel = null;
       }
     }
   }
 
+  //展示目录
+  showDirectory(BuildContext context) {
+    Scaffold.of(context).openDrawer();
+  }
+  //对目录进行排序
+  sortTheDirectory() {
+    state.positive = !state.positive;
+    state.chapterModel?.list = state.chapterModel!.list!.reversed.toList();
+    for (var item in state.chapterModel!.list!) {
+      item.list = item.list!.reversed.toList();
+    }
+    update();
+  }
+
+  showMenu() {
+    state.offstage = !state.offstage;
+    update();
+  }
+
+
   @override
   void onInit() {
     super.onInit();
     state.pageController.addListener(onScroll);
     state.titleStyle = TextStyle(
-        fontSize: 30,
-        color: MyColors.text_color,
-        fontWeight: FontWeight.bold);
+        fontSize: 30, color: MyColors.text_color, fontWeight: FontWeight.bold);
     state.contentStyle =
         TextStyle(fontSize: 20, color: MyColors.text_color, height: 1.7);
     getBookChapters();
@@ -140,7 +175,39 @@ class BookReadLogic extends FunStateActionController {
 
   @override
   Future onLoadData() {
-    // TODO: implement onLoadData
     return getBookChapters();
+  }
+
+ //初始化章节内容的Handler
+  _initGroupHandler() {
+    state.groupHandler = ListViewGroupHandler(
+      //日志开关
+      openLog: false,
+      //分组数量，需要自行根据data设置，默认1
+      numberOfSections: state.chapterModel!.list!.length,
+      //每组cell个数，需要自行根据data设置
+      numberOfRowsInSection: (section) =>
+          state.chapterModel!.list![section].list!.length,
+      //indexPath: IndexPath(section,row,index)
+      cellForRowAtIndexPath: (indexPath) => GestureDetector(
+        onTap: () {
+          print("点击目录选择");
+          resetContent(indexPath.row);
+          Navigator.pop(state.readKey.currentContext!);
+        },
+        child: BookDirectoryItemWidget(
+            item: state
+                .chapterModel!.list![indexPath.section].list![indexPath.row],
+            select: indexPath.row == state.cContentModel!.index),
+      ),
+      //头部
+      headerForSection: (section) => BookDirectoryHeaderWidget(
+        name: state.chapterModel!.list![section].name,
+      ),
+      //占位Placeholder
+      emptyPlaceholder: () {
+        return BookDirectoryItemWidget();
+      },
+    );
   }
 }
