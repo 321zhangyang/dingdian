@@ -10,7 +10,6 @@ class NetBaseResponse<T> {
 
   NetBaseResponse.fromJson( json) {
     code = json[NetResponseConstant.code];
-    print("code === $code");
     message = json[NetResponseConstant.message];
     if (json.containsKey(NetResponseConstant.data)) {
       data = json[NetResponseConstant.data];

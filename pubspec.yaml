@@ -56,6 +56,10 @@ dependencies:
   # 本地存储
   hive: ^2.0.4
   hive_flutter: ^1.1.0
+  # 数据库
+  sqflite: ^2.0.0+2
+  # 路径
+  path_provider: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@ import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
+import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_action_controller.dart';
 import 'package:get/get.dart';
 
@@ -30,16 +31,24 @@ class BookDetailLogic extends FunStateActionController {
   }
 
   //直接阅读
-  readBook(BookDetailInfoModel model) {
+  readBook() {
     //添加历史阅读记录
-    LocalBookConfigRepository.saveBookReadHistroy(model);
+    LocalBookConfigRepository.saveBookReadHistroy(state.model!);
     //跳转阅读
-    Get.toNamed(Routes.READ, arguments: {"bookId": model.id.toString()});
+    Get.toNamed(Routes.READ, arguments: {"model": state.model});
   }
 
   //添加图书到书架
-  addBookToShelf(BookDetailInfoModel model) {
-    LocalBookConfigRepository.saveBookReadHistroy(model);
+  addOrRemoveBookToShelf(BookDetailInfoModel model) async {
+    if (state.isInShelf == false) {
+      await DbHelper.instance.addBooks([model]);
+      state.isInShelf = true;
+    } else {
+      await DbHelper.instance.delBook(model.id!);
+      state.isInShelf = false;
+    }
+    update();
+    //DbHelper.instance.addBooks([model]);
   }
 
   //展示或者收起作者还写过
@@ -72,6 +81,19 @@ class BookDetailLogic extends FunStateActionController {
     state.model = model;
     if (model.sameUserBooks != null) {
       state.showAllUser = model.sameUserBooks!.length > 3 ? false : true;
+    }
+    var book = await DbHelper.instance.getBook(model.id!);
+    //判断是否加入过书架
+    if (book != null) {
+      //书架里有,更新本地数据库
+      state.isInShelf = true;
+      DbHelper.instance.updBook(model.lastChapter ?? "", model.lastTime ?? "",
+          model.lastChapterId ?? 0, model.bookStatus ?? "", model.id!);
+      state.model?.cChapter = book.cChapter;
+      state.model?.cChapterPage = book.cChapterPage;
+    } else {
+      //书架没有,不进行操作,从头开始阅读
+      state.isInShelf = false;
     }
     return model;
   }

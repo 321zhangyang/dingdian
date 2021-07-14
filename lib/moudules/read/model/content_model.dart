@@ -13,6 +13,8 @@ class BookChapterContentModel {
   List<TextPage>? pages;
   //第几章
   int? index;
+  //第几页
+  int? pageOffsets;
 
   BookChapterContentModel(
       {this.id,

@@ -7,6 +7,7 @@ class BookDetailState {
       ScreenUtil.getInstance().statusBarHeight;
   BookDetailInfoModel? model;
   bool? showAllUser = false;
+  bool isInShelf = false;
   BookDetailState() {
     ///Initialize variables
   }

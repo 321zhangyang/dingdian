@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/moudules/mine/theme/theme_logic.dart';
+import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/routes/app_pages.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:flutter_dingdian/utils/dependency_injection.dart';
@@ -16,6 +17,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BookDetailInfoModelAdapter());
   Hive.registerAdapter(BookVoteAdapter());
+  Hive.registerAdapter(BookReadConfigModelAdapter());
   WidgetsFlutterBinding.ensureInitialized();
   runApp(GetBuilder<ThemeLogic>(
     init: ThemeLogic(),

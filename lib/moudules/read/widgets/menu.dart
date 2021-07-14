@@ -3,13 +3,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
 import 'package:flutter_dingdian/moudules/read/logic.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/background.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/font.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/slider.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
 import 'package:get/get.dart';
 
-class ReadBottomMenuWidget extends StatelessWidget {
+enum Type { BACKGROUND, FONT, FLIOVER, SLIDER }
+
+class ReadBottomMenuWidget extends StatefulWidget {
+  @override
+  _ReadBottomMenuWidgetState createState() => _ReadBottomMenuWidgetState();
+}
+
+class _ReadBottomMenuWidgetState extends State<ReadBottomMenuWidget> {
+  Type type = Type.SLIDER;
   final BookReadLogic _logic = Get.put(BookReadLogic());
   @override
   Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [buildHeader(), Gaps.vGap10, buildFooter()],
+      ),
+    );
+  }
+
+  Widget buildHeader() {
+    switch (type) {
+      case Type.BACKGROUND:
+        return ReadBottomBackgroundWidget();
+      case Type.FONT:
+        return ReadBottomFontWidget();
+      case Type.FLIOVER:
+        return Container();
+      case Type.SLIDER:
+        return ReadBottomSliderWidget();
+      default:
+        return Container();
+    }
+  }
+
+  Widget buildFooter() {
     return Container(
       height: ScreenUtil.getInstance().bottomBarHeight + 50,
       child: Row(
@@ -18,11 +52,11 @@ class ReadBottomMenuWidget extends StatelessWidget {
           buildBottomMenuItem(
               '目录', "KKStriveImg_readV_catalogue_Normal", context),
           buildBottomMenuItem(
-              '章节', "KKStriveImg_readV_catalogue_Normal", context),
+              '文字', "KKStriveImg_readV_fontBtn_Normal", context),
           buildBottomMenuItem(
-              '亮度', "KKStriveImg_readV_catalogue_Normal", context),
+              '背景', "KKStriveImg_readV_setting_Normal", context),
           buildBottomMenuItem(
-              '文字', "KKStriveImg_readV_catalogue_Normal", context),
+              '翻页', "KKStriveImg_readV_ pagingBtn_Normal", context),
         ],
       ),
     );
@@ -41,6 +75,7 @@ class ReadBottomMenuWidget extends StatelessWidget {
                 fit: BoxFit.contain,
                 width: 35,
                 height: 35,
+                color: Colors.white,
               )),
           Text(
             title,
@@ -53,10 +88,27 @@ class ReadBottomMenuWidget extends StatelessWidget {
         if (title == "目录") {
           _logic.showMenu();
           _logic.showDirectory(context);
+          type = Type.SLIDER;
         }
-        if (title == "章节") {}
-        if (title == "亮度") {}
-        if (title == "文字") {}
+        if (title == "文字") {
+          setState(() {
+            if (type == Type.FONT) {
+              type = Type.SLIDER;
+            } else {
+              type = Type.FONT;
+            }
+          });
+        }
+        if (title == "背景") {
+          setState(() {
+            if (type == Type.BACKGROUND) {
+              type = Type.SLIDER;
+            } else {
+              type = Type.BACKGROUND;
+            }
+          });
+        }
+        if (title == "下载") {}
       },
     );
   }
