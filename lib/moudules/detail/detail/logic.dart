@@ -94,6 +94,8 @@ class BookDetailLogic extends FunStateActionController {
     } else {
       //书架没有,不进行操作,从头开始阅读
       state.isInShelf = false;
+      state.model?.cChapter = 0;
+      state.model?.cChapterPage = 0;
     }
     return model;
   }

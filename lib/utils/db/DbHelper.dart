@@ -96,6 +96,34 @@ class DbHelper {
     await batch.commit(noResult: true);
   }
 
+  //获取所有图书
+  //获取单本图书
+  Future<List<BookDetailInfoModel>> getBooks(int bookId) async {
+    var dbClient = await db1;
+    List<BookDetailInfoModel> bks = [];
+    var list = await dbClient
+        .rawQuery("select * from $_tableName where bookId=?", [bookId]);
+    for (Map item in list) {
+      BookDetailInfoModel bk = BookDetailInfoModel();
+      bk.id = item["bookId"];
+      bk.name = item["name"];
+      bk.author = item["author"];
+      bk.desc = item["desc"];
+      bk.img = item["img"];
+      bk.cId = item["cId"];
+      bk.cName = item["cName"];
+      bk.lastTime = item["lastTime"];
+      bk.firstChapterId = item["firstChapterId"];
+      bk.lastChapter = item["lastChapter"];
+      bk.lastChapterId = item["lastChapterId"];
+      bk.bookStatus = item["bookStatus"];
+      bk.cChapter = item["cChapter"];
+      bk.cChapterPage = item["cChapterPage"];
+      bks.add(bk);
+    }
+    return bks;
+  }
+
   //获取单本图书
   Future getBook(int bookId) async {
     var dbClient = await db1;
