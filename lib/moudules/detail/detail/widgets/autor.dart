@@ -49,32 +49,37 @@ class BookDetailSameAuthorWidget extends StatelessWidget {
                         height: 100 * 1.35,
                       ),
                       Gaps.hGap15,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Gaps.vGap15,
-                          Text(
-                            books.name ?? "哈哈哈",
-                            style: TextStyle(
-                                fontSize: Dimensions.font_sp18,
-                                color: MyColors.text_color,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Gaps.vGap8,
-                          Text(
-                            "作者: ${books.author}",
-                            style: TextStyle(
-                                fontSize: Dimensions.font_sp14,
-                                color: MyColors.text_color),
-                          ),
-                          Gaps.vGap8,
-                          Text(
-                            books.lastChapter ?? "",
-                            style: TextStyle(
-                                fontSize: Dimensions.font_sp14,
-                                color: MyColors.text_gray_color),
-                          ),
-                        ],
+                      Expanded(
+                                              child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Gaps.vGap15,
+                            Text(
+                              books.name ?? "哈哈哈",
+                              style: TextStyle(
+                                  fontSize: Dimensions.font_sp18,
+                                  color: MyColors.text_color,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Gaps.vGap8,
+                            Text(
+                              "作者: ${books.author}",
+                              style: TextStyle(
+                                  fontSize: Dimensions.font_sp14,
+                                  color: MyColors.text_color),
+                            ),
+                            Gaps.vGap8,
+                            Text(
+                              books.lastChapter ?? "",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: Dimensions.font_sp14,
+                                  
+                                  color: MyColors.text_gray_color),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),

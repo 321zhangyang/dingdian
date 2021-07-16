@@ -176,20 +176,20 @@ class _BookReadPageState extends State<BookReadPage> {
             drawer: Drawer(
               child: ReadDirectoryWidget(),
             ),
-            body: GestureDetector(
-              onTapDown: (details) => logic.tapPage(context, details),
-              onPanEnd: (details) {
-                var x = details.velocity.pixelsPerSecond.dx < 0 ? 1 : -1;
-                logic.changeCoverPage(x);
-              },
-              child: Stack(
-                children: [
-                  _CoverPage(),
-                  Offstage(
-                      offstage: logic.state.offstage,
-                      child: ReadOffstageWidget())
-                ],
-              ),
+            body: Stack(
+              children: [
+                GestureDetector(
+                  child: _CoverPage(),
+                  onTapDown: (details) => logic.tapPage(context, details),
+                  onPanEnd: (details) {
+                    var x = details.velocity.pixelsPerSecond.dx < 0 ? 1 : -1;
+                    logic.changeCoverPage(x);
+                  },
+                ),
+                //隐藏的菜单
+                Offstage(
+                    offstage: logic.state.offstage, child: ReadOffstageWidget())
+              ],
             ));
       },
     );
@@ -205,14 +205,11 @@ class _CoverPage extends StatefulWidget {
 }
 
 class __CoverPageState extends State<_CoverPage> with TickerProviderStateMixin {
-  Widget? lastPage;
-  int? lastPageIndex, lastChapterIndex, lastChangeTime;
+  int? lastPageIndex, lastChapterIndex;
   double x = 0;
   AnimationController? _controller;
   Animation<double>? _animation;
-  GlobalKey canvasKey = new GlobalKey();
   final BookReadLogic logic = Get.put(BookReadLogic());
-
   final BookReadState state = Get.find<BookReadLogic>().state;
   @override
   void initState() {
@@ -221,12 +218,13 @@ class __CoverPageState extends State<_CoverPage> with TickerProviderStateMixin {
     //初始化Controller以及animation
     if (_controller == null) {
       _controller = AnimationController(
-          vsync: this, duration: Duration(milliseconds: 300));
+          vsync: this,
+          duration: Duration(
+              milliseconds: state.configModel!.turnType == 0 ? 0 : 300));
       _animation = CurvedAnimation(parent: _controller!, curve: Curves.linear);
     }
     //添加状态监听
     _controller?.addStatusListener((status) {
-      print("status $status");
       if (status == AnimationStatus.completed) {
         //动画完成后预加载上下页面
         print("here");
@@ -243,24 +241,22 @@ class __CoverPageState extends State<_CoverPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (lastPage != null) {
+    if (state.lastPage != null) {
       bool isChangePage = (lastPageIndex != state.bookModel!.cChapterPage! ||
           lastChapterIndex != state.bookModel!.cChapter);
       if (isChangePage) {
-        if (_controller == null) {
-          _controller = AnimationController(
-            vsync: this,
-            duration: Duration(milliseconds: 300),
-          );
-          _animation = CurvedAnimation(
-            parent: _controller!,
-            curve: Curves.linear,
-          );
-        }
+        _controller = AnimationController(
+          vsync: this,
+          duration: Duration(
+              milliseconds: state.configModel!.turnType == 0 ? 0 : 300),
+        );
+        _animation = CurvedAnimation(
+          parent: _controller!,
+          curve: Curves.linear,
+        );
         bool _isNext = isNext;
-        print("_isNext $_isNext");
-        var _last = lastPage;
-        lastPage = buildPage();
+        var _last = state.lastPage;
+        state.lastPage = buildPage();
         if (_isNext)
           _controller!.forward(from: 0.0);
         else
@@ -268,7 +264,7 @@ class __CoverPageState extends State<_CoverPage> with TickerProviderStateMixin {
         return Stack(
           children: _isNext
               ? [
-                  lastPage!,
+                  state.lastPage!,
                   SlideTransition(
                       child: _last,
                       position: _animation!.drive(
@@ -281,14 +277,14 @@ class __CoverPageState extends State<_CoverPage> with TickerProviderStateMixin {
                       position: _animation!.drive(
                           Tween(begin: Offset(-1.1, .0), end: Offset.zero)
                               .chain(CurveTween(curve: Curves.easeIn))),
-                      child: lastPage)
+                      child: state.lastPage)
                 ],
         );
       }
-      return lastPage!;
+      return state.lastPage!;
     }
-    lastPage = buildPage(firstLoad: true);
-    return lastPage!;
+    state.lastPage = buildPage(firstLoad: true);
+    return state.lastPage!;
   }
 
   Widget buildPage({bool firstLoad = false}) {
@@ -359,24 +355,7 @@ class __CoverPageState extends State<_CoverPage> with TickerProviderStateMixin {
 
   int get curChapterIndex => state.bookModel!.cChapter!;
   // 是否进入下一页
-  // bool isNext() {
-  //   print("curChapterIndex $curChapterIndex");
-  //   print("lastChapterIndex $lastChapterIndex");
-  //   print("lastPageIndex $lastPageIndex");
-  //   print("state.bookModel!.cChapterPage! ${state.bookModel!.cChapterPage!}");
-  //   if (curChapterIndex < lastChapterIndex!) {
-  //     return true;
-  //   }
-  //   return false;
-
-    
-
-  //   //  !(curChapterIndex < lastChapterIndex! ||
-  //   //   (curChapterIndex == lastChapterIndex &&
-  //   //       lastPageIndex! > state.bookModel!.cChapterPage!))
-  // }
-
-    // 是否进入下一页
-  bool get isNext =>   !(curChapterIndex < lastChapterIndex! ||
-      (curChapterIndex == lastChapterIndex &&  lastPageIndex! > state.bookModel!.cChapterPage!));
+  bool get isNext => !(curChapterIndex < lastChapterIndex! ||
+      (curChapterIndex == lastChapterIndex &&
+          lastPageIndex! > state.bookModel!.cChapterPage!));
 }

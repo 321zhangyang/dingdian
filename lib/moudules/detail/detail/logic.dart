@@ -1,6 +1,7 @@
 import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
+import 'package:flutter_dingdian/moudules/shelf/logic.dart';
 import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_action_controller.dart';
@@ -35,7 +36,13 @@ class BookDetailLogic extends FunStateActionController {
     //添加历史阅读记录
     LocalBookConfigRepository.saveBookReadHistroy(state.model!);
     //跳转阅读
-    Get.toNamed(Routes.READ, arguments: {"model": state.model});
+    Get.toNamed(Routes.READ, arguments: {"model": state.model})
+        ?.then((value) async {
+       //返回后做判断   
+      var book = await DbHelper.instance.getBook(state.model!.id!);
+      book == null ? state.isInShelf = false : state.isInShelf = true;
+      update();
+    });
   }
 
   //添加图书到书架
@@ -48,6 +55,9 @@ class BookDetailLogic extends FunStateActionController {
       state.isInShelf = false;
     }
     update();
+    //更新书架
+    Get.find<BookShelfLogic>().pullToRefresh();
+
     //DbHelper.instance.addBooks([model]);
   }
 

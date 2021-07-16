@@ -15,4 +15,7 @@ class BookReadConfigModel extends HiveObject {
   @HiveField(3)
   //行间距
   double? height;
+  @HiveField(4)
+  //行间距
+  int? turnType;
 }

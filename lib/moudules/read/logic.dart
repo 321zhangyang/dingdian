@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
+import 'package:flutter_dingdian/moudules/detail/detail/logic.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/header.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/moudules/read/api/repository.dart';
 import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
+import 'package:flutter_dingdian/moudules/shelf/logic.dart';
 import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
@@ -42,6 +44,14 @@ class BookReadLogic extends FunStateActionController {
     resetContent(state.bookModel!.cChapter!);
   }
 
+  //选择章节的操作
+  changeChapter(int index) {
+    state.bookModel!.cChapter = index;
+    state.bookModel!.cChapterPage = 0;
+    state.lastPage = null;
+    resetContent(index);
+  }
+
   //重置内容
   resetContent(int index) async {
     state.cContentModel =
@@ -59,6 +69,7 @@ class BookReadLogic extends FunStateActionController {
       state.nContentModel = null;
     }
     changeIdle();
+    update();
   }
 
   //获取章节内容
@@ -104,11 +115,8 @@ class BookReadLogic extends FunStateActionController {
     var wid = ScreenUtil.getScreenW(context);
     var hSpace = ScreenUtil.getInstance().screenHeight / 4;
     var space = wid / 3;
-    print(space);
     var curWid = details.globalPosition.dx;
-    print(curWid);
     var curH = details.globalPosition.dy;
-
     if ((curWid > 0 && curWid < space)) {
       print("前一页");
       changeCoverPage(-1);
@@ -245,6 +253,7 @@ class BookReadLogic extends FunStateActionController {
       state.nContentModel!.pages = parseContent(
           state.nContentModel!.content!, state.nContentModel!.cname!);
     }
+    state.lastPage = null;
     update();
   }
 
@@ -252,6 +261,13 @@ class BookReadLogic extends FunStateActionController {
   changeTheme(String theme) async {
     state.configModel!.theme = theme;
     state.configModel!.save();
+    state.lastPage = null;
+    update();
+  }
+
+  changeTurnType(int index) {
+    state.configModel!.turnType = index;
+    
     update();
   }
 
@@ -269,10 +285,14 @@ class BookReadLogic extends FunStateActionController {
               content: Text('是否加入本书'),
               actions: <Widget>[
                 TextButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       await DbHelper.instance.addBooks([state.bookModel!]);
+
                       Navigator.pop(context);
                       Get.back();
+
+                      //更新书架以及详情页面状态
+                      Get.find<BookShelfLogic>().pullToRefresh();
                       //在这要刷新详情页以及书架页面
                     },
                     child: Text('确定')),
@@ -288,8 +308,7 @@ class BookReadLogic extends FunStateActionController {
 
   //判断书架是否有本书
   Future<bool> exitsInBookShelfById(int bookId) async {
-    List<BookDetailInfoModel> books =
-        await DbHelper.instance.getBooks(state.bookModel!.id!);
+    List<BookDetailInfoModel> books = await DbHelper.instance.getBooks();
     return books.map((e) => e.id).toList().contains(bookId);
   }
 
@@ -305,6 +324,7 @@ class BookReadLogic extends FunStateActionController {
       model.height = 1.5;
       model.index = 0;
       model.theme = "theme2_read_bg";
+      model.turnType = 0;
       LocalBookConfigRepository.saveBookReadConfig(model);
       state.configModel = model;
     } else {
@@ -337,15 +357,27 @@ class BookReadLogic extends FunStateActionController {
       //indexPath: IndexPath(section,row,index)
       cellForRowAtIndexPath: (indexPath) => GestureDetector(
         onTap: () {
-          resetContent(indexPath.row);
-          state.bookModel!.cChapter = indexPath.row;
-          state.bookModel!.cChapterPage = 0;
           Navigator.pop(state.readKey.currentContext!);
+          TwoList model =
+              state.chapterModel!.list![indexPath.section].list![indexPath.row];
+          int idx = 0;
+          Future.delayed(Duration(microseconds: 300)).then((value) {
+            for (var i = 0; i < state.allChapters.length; i++) {
+              TwoList temp = state.allChapters[i];
+              if (temp.id == model.id) {
+                idx = i;
+                changeChapter(idx);
+                return;
+              }
+            }
+          });
         },
         child: BookDirectoryItemWidget(
             item: state
                 .chapterModel!.list![indexPath.section].list![indexPath.row],
-            select: indexPath.row == state.cContentModel!.index),
+            select: state.chapterModel!.list![indexPath.section]
+                    .list![indexPath.row].id ==
+                state.cContentModel!.cid),
       ),
       //头部
       headerForSection: (section) => BookDirectoryHeaderWidget(

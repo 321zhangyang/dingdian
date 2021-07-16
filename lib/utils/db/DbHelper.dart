@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flustars/flustars.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -66,6 +67,7 @@ class DbHelper {
         "lastChapterId INTEGER,"
         "cChapter INTEGER,"
         "cChapterPage INTEGER,"
+        "sortTime INTEGER,"
         "bookStatus TEXT)");
     await db.execute("CREATE INDEX book_id_idx ON $_tableName (bookId);");
   }
@@ -90,6 +92,7 @@ class DbHelper {
         "lastChapterId": book.lastChapterId,
         "cChapter": book.cChapter ?? 0,
         "cChapterPage": book.cChapterPage ?? 0,
+        "sortTime": DateUtil.getNowDateMs(),
         "bookStatus": book.bookStatus,
       });
     }
@@ -98,11 +101,11 @@ class DbHelper {
 
   //获取所有图书
   //获取单本图书
-  Future<List<BookDetailInfoModel>> getBooks(int bookId) async {
+  Future<List<BookDetailInfoModel>> getBooks() async {
     var dbClient = await db1;
     List<BookDetailInfoModel> bks = [];
     var list = await dbClient
-        .rawQuery("select * from $_tableName where bookId=?", [bookId]);
+        .rawQuery("select * from $_tableName order by sortTime desc", []);
     for (Map item in list) {
       BookDetailInfoModel bk = BookDetailInfoModel();
       bk.id = item["bookId"];
@@ -119,6 +122,7 @@ class DbHelper {
       bk.bookStatus = item["bookStatus"];
       bk.cChapter = item["cChapter"];
       bk.cChapterPage = item["cChapterPage"];
+      bk.sortTime = item["sortTime"];
       bks.add(bk);
     }
     return bks;
@@ -145,6 +149,7 @@ class DbHelper {
       bk.bookStatus = item["bookStatus"];
       bk.cChapter = item["cChapter"];
       bk.cChapterPage = item["cChapterPage"];
+      bk.sortTime = item["sortTime"];
     }
     return list.length > 0 ? bk : null;
   }
@@ -178,5 +183,13 @@ class DbHelper {
       bookId,
     ]);
     print("更新图书进度成功");
+  }
+
+  Future<Null> sortBook(int bookId) async {
+    var dbClient = await db1;
+
+    await dbClient.rawUpdate(
+        'update  $_tableName set sortTime=${DateUtil.getNowDateMs()},newChapter=0 where bookId=?',
+        [bookId]);
   }
 }

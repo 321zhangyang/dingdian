@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/mine/mine/view.dart';
+import 'package:flutter_dingdian/moudules/shelf/view.dart';
 import 'package:flutter_dingdian/moudules/shop/shop/view.dart';
 
 
 
-List<Widget> pageList = [MinePage(),ShopPage(),MinePage()];
+List<Widget> pageList = [BookShelfPage(),ShopPage(),MinePage()];
 final List<String> appBarTitles = ['书架', '书城','我的'];
 
 
