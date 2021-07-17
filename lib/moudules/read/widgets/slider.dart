@@ -15,6 +15,7 @@ class _ReadBottomSliderWidgetState extends State<ReadBottomSliderWidget> {
   double _sliderValue = 0;
   @override
   Widget build(BuildContext context) {
+     _sliderValue = _logic.state.bookModel!.cChapter!.toDouble();
     return Container(
         height: 30,
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
