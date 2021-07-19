@@ -17,13 +17,13 @@ class MineBookListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: SegmentBar(
-            titleNames: _logic.state.titles,
-            itemWidth: ScreenUtil.getInstance().getSp(70),
-            itemHeight: ScreenUtil.getInstance().getSp(35),
-            selectedColor: Colors.white,
-            defaultColor: MyColors().getThemeColor(),
-            onSelectChanged: (position) {}),
+        // title: SegmentBar(
+        //     titleNames: _logic.state.titles,
+        //     itemWidth: ScreenUtil.getInstance().getSp(70),
+        //     itemHeight: ScreenUtil.getInstance().getSp(35),
+        //     selectedColor: Colors.white,
+        //     defaultColor: MyColors().getThemeColor(),
+        //     onSelectChanged: (position) {}),
         actions: [
           Container(
             width: 56,

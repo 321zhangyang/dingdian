@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
+import 'package:flutter_dingdian/moudules/tabbar/logic.dart';
 import 'package:flutter_dingdian/moudules/tabbar/widgets/tabbar_item.dart';
-
-
+import 'package:get/get.dart';
 
 class TabBarPage extends StatefulWidget {
   final int selectIndex;
@@ -14,13 +14,8 @@ class TabBarPage extends StatefulWidget {
 }
 
 class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
-  GlobalKey _stackKey = GlobalKey();
+  final _logic = Get.put(TabbarLogic());
   int _currentIndex = 0;
-  var _pageController = PageController();
-  bool isSelectedFirst = true;
-
-  int homeTopIndex = 0;
-
   @override
   void initState() {
     super.initState();
@@ -31,18 +26,21 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
     double itemWidth = MediaQuery.of(context).size.width / 3;
 
     return Scaffold(
-      key: _stackKey,
-      body: PageView.builder(
-        itemBuilder: (ctx, index) {
-          return pageList[index];
-        },
-        itemCount: pageList.length,
-        controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
-        onPageChanged: (value) {
-          setState(() {
-            _currentIndex = value;
-          });
+      body: GetBuilder<TabbarLogic>(
+        builder: (_) {
+          return PageView.builder(
+            itemBuilder: (ctx, index) {
+              return pageList[index];
+            },
+            itemCount: pageList.length,
+            controller: _logic.pageController,
+            physics: NeverScrollableScrollPhysics(),
+            onPageChanged: (value) {
+              setState(() {
+                _currentIndex = value;
+              });
+            },
+          );
         },
       ),
       bottomNavigationBar: Theme(
@@ -50,9 +48,9 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
         child: BottomAppBar(
           color: Colors.white,
           child: Row(children: <Widget>[
-            Container( height: 50,width: itemWidth, child: tabbar(0)),
-            Container( height: 50,width: itemWidth, child: tabbar(1)),
-            Container( height: 50,width: itemWidth, child: tabbar(2)),
+            Container(height: 50, width: itemWidth, child: tabbar(0)),
+            Container(height: 50, width: itemWidth, child: tabbar(1)),
+            Container(height: 50, width: itemWidth, child: tabbar(2)),
           ]),
         ),
       ),
@@ -64,7 +62,8 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
     double itemWidth = MediaQuery.of(context).size.width / 3;
 
     //设置默认未选中的状态
-    TextStyle style = TextStyle(fontSize: 12, color: Color.fromRGBO(50, 50, 50, 1));
+    TextStyle style =
+        TextStyle(fontSize: 12, color: Color.fromRGBO(50, 50, 50, 1));
     String imgUrl = normalImgUrls[index];
     if (_currentIndex == index) {
       //选中的话
@@ -81,7 +80,10 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
             SizedBox(
               height: 2,
             ),
-            Image.asset(imgUrl,color: _currentIndex == index ? MyColors().getThemeColor() : null,),
+            Image.asset(
+              imgUrl,
+              color: _currentIndex == index ? MyColors().getThemeColor() : null,
+            ),
             Text(
               appBarTitles[index],
               style: style,
@@ -89,24 +91,15 @@ class TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
           ]),
         ),
         onTap: () {
-          if (_currentIndex != index) {
-            if (index == 0) {
-              isSelectedFirst = true;
-            } else {
-              isSelectedFirst = false;
-            }
-            setState(() {
+          setState(() {
               _currentIndex = index;
-              _pageController.jumpToPage(index);
+              _logic.pageController.jumpToPage(index);
             });
-          }
         },
       ),
     );
     return item;
   }
-
-
 
   @override
   void dispose() {

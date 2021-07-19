@@ -73,7 +73,7 @@ class DbHelper {
   }
 
   Future<Null> addBooks(List<BookDetailInfoModel> bks) async {
-    var dbClient = await db1;
+    var dbClient = await db;
 
     var batch = dbClient.batch();
 
@@ -102,7 +102,7 @@ class DbHelper {
   //获取所有图书
   //获取单本图书
   Future<List<BookDetailInfoModel>> getBooks() async {
-    var dbClient = await db1;
+    var dbClient = await db;
     List<BookDetailInfoModel> bks = [];
     var list = await dbClient
         .rawQuery("select * from $_tableName order by sortTime desc", []);
@@ -130,7 +130,7 @@ class DbHelper {
 
   //获取单本图书
   Future getBook(int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
     BookDetailInfoModel? bk = BookDetailInfoModel();
     var list = await dbClient
         .rawQuery("select * from $_tableName where bookId=?", [bookId]);
@@ -156,7 +156,7 @@ class DbHelper {
 
   //删除图书
   Future<Null> delBook(int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
 
     await dbClient
         .rawDelete('delete from $_tableName where bookId=?', [bookId]);
@@ -165,7 +165,7 @@ class DbHelper {
   //更新图书信息
   Future<Null> updBook(String lastChapter, String lastTime, int lastChapterId,
       String bookStatus, int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
     dbClient.rawUpdate(
         "update $_tableName set lastChapter=?,lastTime=?,lastChapterId=?,bookStatus=? where bookId=?",
         [lastChapter, lastTime, lastChapterId, bookStatus, bookId]);
@@ -175,7 +175,7 @@ class DbHelper {
   //更新图书阅读信息
   Future<Null> updBookProcess(
       int cChapter, int cChapterPage, int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
     await dbClient.rawUpdate(
         "update $_tableName set cChapter=?,cChapterPage=? where bookId=?", [
       cChapter,
@@ -186,10 +186,10 @@ class DbHelper {
   }
 
   Future<Null> sortBook(int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
 
     await dbClient.rawUpdate(
-        'update  $_tableName set sortTime=${DateUtil.getNowDateMs()},newChapter=0 where bookId=?',
+        'update  $_tableName set sortTime=${DateUtil.getNowDateMs()} where bookId=?',
         [bookId]);
   }
 }
