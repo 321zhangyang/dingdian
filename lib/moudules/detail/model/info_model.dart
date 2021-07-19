@@ -29,6 +29,7 @@ class BookDetailInfoModel {
   String? declare;
   int? cChapter;
   int? cChapterPage;
+  int? sortTime;
 
   BookDetailInfoModel(
       {this.id,
@@ -49,7 +50,8 @@ class BookDetailInfoModel {
       this.upUser,
       this.declare,
       this.cChapter,
-      this.cChapterPage});
+      this.cChapterPage,
+      this.sortTime});
 
   BookDetailInfoModel.fromJson(Map<String, dynamic> json) {
     this.id = json["Id"];

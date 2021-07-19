@@ -15,7 +15,7 @@ class _ReadBottomSliderWidgetState extends State<ReadBottomSliderWidget> {
   double _sliderValue = 0;
   @override
   Widget build(BuildContext context) {
-     _sliderValue = _logic.state.bookModel!.cChapter!.toDouble();
+    _sliderValue = _logic.state.bookModel!.cChapter!.toDouble();
     return Container(
         height: 30,
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -24,7 +24,7 @@ class _ReadBottomSliderWidgetState extends State<ReadBottomSliderWidget> {
               if (_sliderValue > 0) {
                 setState(() {
                   _sliderValue = _sliderValue - 1;
-                  _logic.resetContent(_sliderValue.toInt());
+                  _logic.changeChapter(_sliderValue.toInt());
                 });
               }
             },
@@ -49,7 +49,7 @@ class _ReadBottomSliderWidgetState extends State<ReadBottomSliderWidget> {
                     onChanged: (value) {
                       setState(() {
                         _sliderValue = value;
-                        _logic.resetContent(_sliderValue.toInt());
+                        _logic.changeChapter(_sliderValue.toInt());
                       });
                     })),
           ),
@@ -57,7 +57,7 @@ class _ReadBottomSliderWidgetState extends State<ReadBottomSliderWidget> {
             onTap: () {
               setState(() {
                 _sliderValue = _sliderValue + 1;
-                _logic.resetContent(_sliderValue.toInt());
+                _logic.changeChapter(_sliderValue.toInt());
               });
             },
             child: Container(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/common/model/tab_model.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:flutter_dingdian/moudules/shop/top/api/repository.dart';
+import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
 
@@ -75,6 +76,12 @@ class ShopTopLogic extends FunStateListRefresherController {
     }
     state.selectSubModel = state.subTabs.first;
     state.selectSubModel!.isSelect = true;
+  }
+
+    jumpToDetail(String bookId) {
+    Get.toNamed(Routes.DETAIL,arguments: {
+      "bookId": bookId
+    });
   }
 
   @override

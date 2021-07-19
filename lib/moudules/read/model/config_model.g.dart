@@ -20,13 +20,14 @@ class BookReadConfigModelAdapter extends TypeAdapter<BookReadConfigModel> {
       ..index = fields[0] as int?
       ..theme = fields[1] as String?
       ..font = fields[2] as int?
-      ..height = fields[3] as double?;
+      ..height = fields[3] as double?
+      ..turnType = fields[4] as int?;
   }
 
   @override
   void write(BinaryWriter writer, BookReadConfigModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.index)
       ..writeByte(1)
@@ -34,7 +35,9 @@ class BookReadConfigModelAdapter extends TypeAdapter<BookReadConfigModel> {
       ..writeByte(2)
       ..write(obj.font)
       ..writeByte(3)
-      ..write(obj.height);
+      ..write(obj.height)
+      ..writeByte(4)
+      ..write(obj.turnType);
   }
 
   @override

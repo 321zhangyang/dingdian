@@ -21,14 +21,17 @@ class ShopChoseBannerWidget extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             BookBannerModel model = _logic.state.banner![index];
             // 获取图片
-            return Card(
-              color: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusDirectional.circular(10)),
-              clipBehavior: Clip.antiAlias,
-              child: LoadImage(
-                  model.imgurl,
-                  fit: BoxFit.fill),
+            return GestureDetector(
+              onTap: ()=> _logic.jumpToDetail(model.param!),
+              child: Card(
+                color: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusDirectional.circular(10)),
+                clipBehavior: Clip.antiAlias,
+                child: LoadImage(
+                    model.imgurl,
+                    fit: BoxFit.fill),
+              ),
             );
           },
           // 添加一个页码指示器

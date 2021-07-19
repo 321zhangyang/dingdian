@@ -29,9 +29,11 @@ class BookReadState {
   ListViewGroupHandler? groupHandler;
   //目录排序
   bool positive = true;
-
+  //全局key
   final readKey = new GlobalKey<NavigatorState>();
-
+  //是否展示菜单
   bool offstage = true;
+  //最后一个展示的page,此处放在page,是方便切换目录后,置空
+  Widget? lastPage;
   BookReadState();
 }

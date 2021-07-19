@@ -27,7 +27,7 @@ class ShopCategoryPage extends StatelessWidget {
               crossAxisCount: 3,
               mainAxisSpacing: 15,
               crossAxisSpacing: 20,
-              childAspectRatio: 0.75),
+              childAspectRatio: 0.7),
           itemCount: _logic.state.categorys.length,
           itemBuilder: (context, index) {
             BookCategoryModel model = _logic.state.categorys[index];

@@ -11,10 +11,6 @@ class BookChapterContentModel {
   int? hasContent;
   //处理过后的内容
   List<TextPage>? pages;
-  //第几章
-  int? index;
-  //第几页
-  int? pageOffsets;
 
   BookChapterContentModel(
       {this.id,

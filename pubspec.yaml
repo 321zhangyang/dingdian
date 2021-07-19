@@ -60,6 +60,8 @@ dependencies:
   sqflite: ^2.0.0+2
   # 路径
   path_provider: ^2.0.1
+  # 侧滑删除
+  flutter_slidable: ^0.6.0
 
 dev_dependencies:
   flutter_test:

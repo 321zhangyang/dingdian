@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
+import 'package:flutter_dingdian/moudules/detail/detail/logic.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/header.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
@@ -10,6 +11,8 @@ import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/moudules/read/api/repository.dart';
 import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
+import 'package:flutter_dingdian/moudules/read/view.dart';
+import 'package:flutter_dingdian/moudules/shelf/logic.dart';
 import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
@@ -22,6 +25,21 @@ class BookReadLogic extends FunStateActionController {
   final state = BookReadState();
   final _chapterRepository = Get.put(BookDetailInfoRepository());
   final _contentRepository = Get.put(BookReadRepository());
+
+  //获取图书记录等信息
+  getBookRecord() async {
+    if (SpUtil.haveKey(state.bookModel!.id!.toString()) == true) {
+      state.allChapters =
+          await DbHelper.instance.getChapters(state.bookModel!.id!);
+      if (state.allChapters.length == 0) {
+        await getBookChapters();
+      }
+    } else {
+      await getBookChapters();
+      await SpUtil.putString(state.bookModel!.id.toString(), "1");
+    }
+    resetContent(state.bookModel!.cChapter!);
+  }
 
   //获取所有章节
   getBookChapters() async {
@@ -37,24 +55,36 @@ class BookReadLogic extends FunStateActionController {
         state.allChapters.add(two);
       }
     }
-    //将章节信息进行存储
-    _initGroupHandler();
-    resetContent(state.bookModel!.cChapter!);
+    DbHelper.instance.addChapters(state.allChapters, bookId);
+  }
+
+  //获取章节内容
+  loadChapter(int index) {
+    BookChapterContentModel contentModel = BookChapterContentModel();
+    if (index < 0) {}
+  }
+
+  //选择章节的操作
+  changeChapter(int index) {
+    state.bookModel!.cChapter = index;
+    state.bookModel!.cChapterPage = 0;
+    state.lastPage = null;
+    resetContent(index);
   }
 
   //重置内容
   resetContent(int index) async {
-    state.cContentModel =
-        await getBookChapterContent(state.allChapters[index].id.toString());
+    state.cContentModel = await getBookChapterContent(
+        state.allChapters[index].id.toString(), index);
     if (state.cContentModel!.pid! > 0) {
-      state.pContentModel =
-          await getBookChapterContent(state.cContentModel!.pid.toString());
+      state.pContentModel = await getBookChapterContent(
+          state.cContentModel!.pid.toString(), index - 1);
     } else {
       state.pContentModel = null;
     }
     if (state.cContentModel!.nid! > 0) {
-      state.nContentModel =
-          await getBookChapterContent(state.cContentModel!.nid.toString());
+      state.nContentModel = await getBookChapterContent(
+          state.cContentModel!.nid.toString(), index + 1);
     } else {
       state.nContentModel = null;
     }
@@ -64,7 +94,16 @@ class BookReadLogic extends FunStateActionController {
 
   //获取章节内容
   Future<BookChapterContentModel> getBookChapterContent(
-      String chapterId) async {
+      String chapterId, int index) async {
+    TwoList chapter = state.allChapters[index];
+    if (chapter.hasContent != 2) {
+      //没有内容,网路请求内容,然后数据库保存,存储包括 id 章节内容 前一张 后一张 
+      
+    }else {
+      //有内容直接数据库,取出来,构造一个新的contentmodel
+
+    }
+
     //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
     String bookId = state.bookModel!.id.toString();
     int path = int.parse(bookId.substring(0, bookId.length - 3)) + 1;
@@ -105,11 +144,8 @@ class BookReadLogic extends FunStateActionController {
     var wid = ScreenUtil.getScreenW(context);
     var hSpace = ScreenUtil.getInstance().screenHeight / 4;
     var space = wid / 3;
-    print(space);
     var curWid = details.globalPosition.dx;
-    print(curWid);
     var curH = details.globalPosition.dy;
-
     if ((curWid > 0 && curWid < space)) {
       print("前一页");
       changeCoverPage(-1);
@@ -140,7 +176,7 @@ class BookReadLogic extends FunStateActionController {
         state.cContentModel = state.nContentModel;
         if (state.cContentModel!.nid! > 0) {
           state.nContentModel =
-              await getBookChapterContent(state.cContentModel!.nid.toString());
+              await getBookChapterContent(state.cContentModel!.nid.toString(), tempCur);
         } else {
           state.nContentModel = null;
         }
@@ -163,7 +199,7 @@ class BookReadLogic extends FunStateActionController {
       update();
       if (state.cContentModel!.pid! > 0) {
         state.pContentModel =
-            await getBookChapterContent(state.cContentModel!.pid.toString());
+            await getBookChapterContent(state.cContentModel!.pid.toString(),tempCur);
       } else {
         state.pContentModel = null;
       }
@@ -193,6 +229,8 @@ class BookReadLogic extends FunStateActionController {
 
   //对目录进行排序
   sortTheDirectory() {
+    //将章节信息进行存储
+    _initGroupHandler();
     state.positive = !state.positive;
     state.chapterModel?.list = state.chapterModel!.list!.reversed.toList();
     for (var item in state.chapterModel!.list!) {
@@ -246,6 +284,7 @@ class BookReadLogic extends FunStateActionController {
       state.nContentModel!.pages = parseContent(
           state.nContentModel!.content!, state.nContentModel!.cname!);
     }
+    state.lastPage = null;
     update();
   }
 
@@ -253,6 +292,13 @@ class BookReadLogic extends FunStateActionController {
   changeTheme(String theme) async {
     state.configModel!.theme = theme;
     state.configModel!.save();
+    state.lastPage = null;
+    update();
+  }
+
+  changeTurnType(int index) {
+    state.configModel!.turnType = index;
+
     update();
   }
 
@@ -272,8 +318,12 @@ class BookReadLogic extends FunStateActionController {
                 TextButton(
                     onPressed: () async {
                       await DbHelper.instance.addBooks([state.bookModel!]);
+
                       Navigator.pop(context);
                       Get.back();
+
+                      //更新书架以及详情页面状态
+                      Get.find<BookShelfLogic>().pullToRefresh();
                       //在这要刷新详情页以及书架页面
                     },
                     child: Text('确定')),
@@ -289,8 +339,7 @@ class BookReadLogic extends FunStateActionController {
 
   //判断书架是否有本书
   Future<bool> exitsInBookShelfById(int bookId) async {
-    List<BookDetailInfoModel> books =
-        await DbHelper.instance.getBooks(state.bookModel!.id!);
+    List<BookDetailInfoModel> books = await DbHelper.instance.getBooks();
     return books.map((e) => e.id).toList().contains(bookId);
   }
 
@@ -306,6 +355,7 @@ class BookReadLogic extends FunStateActionController {
       model.height = 1.5;
       model.index = 0;
       model.theme = "theme2_read_bg";
+      model.turnType = 0;
       LocalBookConfigRepository.saveBookReadConfig(model);
       state.configModel = model;
     } else {
@@ -317,7 +367,8 @@ class BookReadLogic extends FunStateActionController {
         fontSize: state.configModel!.font!.toDouble(),
         color: MyColors.text_color,
         height: state.configModel!.height);
-    getBookChapters();
+    // getBookChapters();
+    getBookRecord();
   }
 
   @override
@@ -337,19 +388,28 @@ class BookReadLogic extends FunStateActionController {
           state.chapterModel!.list![section].list!.length,
       //indexPath: IndexPath(section,row,index)
       cellForRowAtIndexPath: (indexPath) => GestureDetector(
-        onTap: () async {
-          print("indexPath.row ${indexPath.row}");
-          state.bookModel!.cChapter = indexPath.row;
-          print("state.bookModel! ${state.bookModel!.cChapter}");
-          state.bookModel!.cChapterPage = 0;
-          await resetContent(indexPath.row);
-
+        onTap: () {
           Navigator.pop(state.readKey.currentContext!);
+          TwoList model =
+              state.chapterModel!.list![indexPath.section].list![indexPath.row];
+          int idx = 0;
+          Future.delayed(Duration(microseconds: 300)).then((value) {
+            for (var i = 0; i < state.allChapters.length; i++) {
+              TwoList temp = state.allChapters[i];
+              if (temp.id == model.id) {
+                idx = i;
+                changeChapter(idx);
+                return;
+              }
+            }
+          });
         },
         child: BookDirectoryItemWidget(
             item: state
                 .chapterModel!.list![indexPath.section].list![indexPath.row],
-            select: indexPath.row == state.bookModel!.cChapter),
+            select: state.chapterModel!.list![indexPath.section]
+                    .list![indexPath.row].id ==
+                state.cContentModel!.cid),
       ),
       //头部
       headerForSection: (section) => BookDirectoryHeaderWidget(

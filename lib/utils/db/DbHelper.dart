@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flustars/flustars.dart';
+import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,8 +10,8 @@ class DbHelper {
   static DbHelper _dbHelper = new DbHelper();
   static DbHelper instance = _dbHelper;
 
-  final String _chapterName = "chapters";
   final String _tableName = "books";
+  final String _tableName1 = "chapters";
 
   static Database? _db;
   static Database? _db1;
@@ -44,9 +46,9 @@ class DbHelper {
   //初始化数据库
   _initDb1() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = documentsDirectory.path + "/books.db";
+    String path = documentsDirectory.path + "/chapters.db";
     print("chapter $path");
-    var db = await openDatabase(path, version: version, onCreate: _onCreate);
+    var db = await openDatabase(path, version: version, onCreate: _onCreate1);
     return db;
   }
 
@@ -66,12 +68,27 @@ class DbHelper {
         "lastChapterId INTEGER,"
         "cChapter INTEGER,"
         "cChapterPage INTEGER,"
+        "sortTime INTEGER,"
         "bookStatus TEXT)");
     await db.execute("CREATE INDEX book_id_idx ON $_tableName (bookId);");
   }
 
+  // When creating the db, create the table
+  void _onCreate1(Database db, int version) async {
+    await db.execute("CREATE TABLE IF NOT EXISTS $_tableName1("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "chapterId INTEGER,"
+        "name TEXT,"
+        "content TEXT,"
+        "bookId INTEGER,"
+        "hasContent INTEGER)");
+    await db.execute("CREATE INDEX book_id_idx ON $_tableName1 (bookId);");
+    await db
+        .execute("CREATE INDEX chapter_id_idx ON $_tableName1 (chapterId);");
+  }
+
   Future<Null> addBooks(List<BookDetailInfoModel> bks) async {
-    var dbClient = await db1;
+    var dbClient = await db;
 
     var batch = dbClient.batch();
 
@@ -90,6 +107,7 @@ class DbHelper {
         "lastChapterId": book.lastChapterId,
         "cChapter": book.cChapter ?? 0,
         "cChapterPage": book.cChapterPage ?? 0,
+        "sortTime": DateUtil.getNowDateMs(),
         "bookStatus": book.bookStatus,
       });
     }
@@ -98,11 +116,11 @@ class DbHelper {
 
   //获取所有图书
   //获取单本图书
-  Future<List<BookDetailInfoModel>> getBooks(int bookId) async {
-    var dbClient = await db1;
+  Future<List<BookDetailInfoModel>> getBooks() async {
+    var dbClient = await db;
     List<BookDetailInfoModel> bks = [];
     var list = await dbClient
-        .rawQuery("select * from $_tableName where bookId=?", [bookId]);
+        .rawQuery("select * from $_tableName order by sortTime desc", []);
     for (Map item in list) {
       BookDetailInfoModel bk = BookDetailInfoModel();
       bk.id = item["bookId"];
@@ -119,6 +137,7 @@ class DbHelper {
       bk.bookStatus = item["bookStatus"];
       bk.cChapter = item["cChapter"];
       bk.cChapterPage = item["cChapterPage"];
+      bk.sortTime = item["sortTime"];
       bks.add(bk);
     }
     return bks;
@@ -126,7 +145,7 @@ class DbHelper {
 
   //获取单本图书
   Future getBook(int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
     BookDetailInfoModel? bk = BookDetailInfoModel();
     var list = await dbClient
         .rawQuery("select * from $_tableName where bookId=?", [bookId]);
@@ -145,13 +164,14 @@ class DbHelper {
       bk.bookStatus = item["bookStatus"];
       bk.cChapter = item["cChapter"];
       bk.cChapterPage = item["cChapterPage"];
+      bk.sortTime = item["sortTime"];
     }
     return list.length > 0 ? bk : null;
   }
 
   //删除图书
   Future<Null> delBook(int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
 
     await dbClient
         .rawDelete('delete from $_tableName where bookId=?', [bookId]);
@@ -160,7 +180,7 @@ class DbHelper {
   //更新图书信息
   Future<Null> updBook(String lastChapter, String lastTime, int lastChapterId,
       String bookStatus, int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
     dbClient.rawUpdate(
         "update $_tableName set lastChapter=?,lastTime=?,lastChapterId=?,bookStatus=? where bookId=?",
         [lastChapter, lastTime, lastChapterId, bookStatus, bookId]);
@@ -170,7 +190,7 @@ class DbHelper {
   //更新图书阅读信息
   Future<Null> updBookProcess(
       int cChapter, int cChapterPage, int bookId) async {
-    var dbClient = await db1;
+    var dbClient = await db;
     await dbClient.rawUpdate(
         "update $_tableName set cChapter=?,cChapterPage=? where bookId=?", [
       cChapter,
@@ -178,5 +198,51 @@ class DbHelper {
       bookId,
     ]);
     print("更新图书进度成功");
+  }
+
+  Future<Null> sortBook(int bookId) async {
+    var dbClient = await db;
+
+    await dbClient.rawUpdate(
+        'update  $_tableName set sortTime=${DateUtil.getNowDateMs()} where bookId=?',
+        [bookId]);
+  }
+
+  /// 添加章节
+  Future<Null> addChapters(List<TwoList> cps, String bookId) async {
+    var dbClient = await db1;
+    var batch = dbClient.batch();
+    for (var i = 0; i < cps.length; i++) {
+      TwoList chapter = cps[i];
+      batch.rawInsert(
+          'insert into $_tableName1 (chapterId,name,content,bookId,hasContent) values(?,?,?,?,?)',
+          [chapter.id, chapter.name, "", bookId, chapter.hasContent]);
+    }
+
+    await batch.commit(noResult: true);
+  }
+
+  Future<List<TwoList>> getChapters(int bookId) async {
+    var dbClient = await db1;
+    var list = await dbClient.rawQuery(
+        "select hasContent,chapterId,name from $_tableName1 where bookId=?",
+        [bookId]);
+    print(list);
+    List<TwoList> cps = [];
+    for (Map i in list) {
+      TwoList cp = TwoList();
+      cp.hasContent = i['hasContent'];
+      cp.id = i['chapterId'];
+      cp.name = i['name'];
+      cps.add(cp);
+    }
+    return cps;
+  }
+
+  // 清除章节
+  Future<Null> clearChapters(int bookId) async {
+    var dbClient = await db;
+    await dbClient
+        .rawDelete("delete from $_tableName where bookId=?", [bookId]);
   }
 }

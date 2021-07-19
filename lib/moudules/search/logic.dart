@@ -1,6 +1,7 @@
 import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
 import 'package:flutter_dingdian/moudules/search/api/repository.dart';
+import 'package:flutter_dingdian/routes/app_routes.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
 
@@ -52,5 +53,11 @@ class BookSearchLogic extends FunStateListRefresherController {
     LocalBookConfigRepository.clearSearchHistory();
     state.historys = [];
     update();
+  }
+
+  jumpToDetail(String bookId) {
+    Get.toNamed(Routes.DETAIL,arguments: {
+      "bookId": bookId
+    });
   }
 }

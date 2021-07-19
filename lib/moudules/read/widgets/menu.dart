@@ -6,6 +6,7 @@ import 'package:flutter_dingdian/moudules/read/logic.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/background.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/font.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/slider.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/turn.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +36,7 @@ class _ReadBottomMenuWidgetState extends State<ReadBottomMenuWidget> {
       case Type.FONT:
         return ReadBottomFontWidget();
       case Type.FLIOVER:
-        return Container();
+        return ReadBottomTurnWidget();
       case Type.SLIDER:
         return ReadBottomSliderWidget();
       default:
@@ -46,6 +47,7 @@ class _ReadBottomMenuWidgetState extends State<ReadBottomMenuWidget> {
   Widget buildFooter() {
     return Container(
       height: ScreenUtil.getInstance().bottomBarHeight + 50,
+      width: ScreenUtil.getInstance().screenWidth,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -108,7 +110,15 @@ class _ReadBottomMenuWidgetState extends State<ReadBottomMenuWidget> {
             }
           });
         }
-        if (title == "下载") {}
+        if (title == "翻页") {
+          setState(() {
+            if (type == Type.FLIOVER) {
+              type = Type.SLIDER;
+            } else {
+              type = Type.FLIOVER;
+            }
+          });
+        }
       },
     );
   }

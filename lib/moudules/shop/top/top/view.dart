@@ -90,9 +90,12 @@ class _ShopTopPageState extends State<ShopTopPage>
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                               BookList model = _logic.list[index];
-                              return ShopTopListItem(
-                                index: index,
-                                model: model,
+                              return GestureDetector(
+                                onTap: ()=> _logic.jumpToDetail(model.id.toString()),
+                                child: ShopTopListItem(
+                                  index: index,
+                                  model: model,
+                                ),
                               );
                         },
                         itemCount: _logic.list.length,
