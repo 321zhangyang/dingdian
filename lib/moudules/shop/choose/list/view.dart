@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/constants.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/empty/common_empty.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/error/common_error.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/list/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
@@ -40,10 +42,20 @@ class _BookChooseListPageState extends State<BookChooseListPage>
           ),
           Expanded(
               child: FunStateRefresherObx(
+            onEmpty: CommonEmptyWidget(),
+            onError: (error) {
+              return CommonErrorWidget(
+                click: () {
+                  _logic.pullToRefresh();
+                },
+              );
+            },
             builder: () => ListView.separated(
                 itemBuilder: (context, index) {
                   BookList model = _logic.list[index];
-                  return ShopChooseListItem(model: model,);
+                  return ShopChooseListItem(
+                    model: model,
+                  );
                 },
                 separatorBuilder: (context, index) {
                   return Divider(

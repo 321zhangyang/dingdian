@@ -24,10 +24,10 @@ class ShopChooseLogic extends FunStateActionController {
 
   @override
   Future onLoadData() async {
-    throw UnimplementedError();
+    return getdata();
   }
 
-  getdata() {
+  getdata() async{
     changeLoading();
     Future.wait([
       _repository.getBannerList(),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/constants.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/empty/common_empty.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/error/common_error.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/list/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/model/list_model.dart';
 import 'package:fun_flutter_kit/state/src/controller/fun_state_obx.dart';
@@ -63,7 +65,14 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
                 itemCount: _logic.list.length),
             controller: _logic,
             enablePullUp: true,
-            onEmpty: Text("空的"),
+            onEmpty: CommonEmptyWidget(),
+            onError: (error) {
+              return CommonErrorWidget(
+                click: () {
+                  _logic.pullToRefresh();
+                },
+              );
+            },
           ))
         ],
       ),
@@ -73,7 +82,7 @@ class _ShopCategoryListPageState extends State<ShopCategoryListPage>
   @override
   void initState() {
     super.initState();
-    
+
     _logic.initTabController(this);
   }
 }

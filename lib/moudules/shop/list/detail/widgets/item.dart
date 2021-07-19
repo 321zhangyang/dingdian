@@ -30,10 +30,13 @@ class ShopBookListDetailItem extends StatelessWidget {
                 Gaps.vGap10,
                 Row(
                   children: [
-                    Text(model?.bookName ?? "",
-                        style: TextStyle(
-                            fontSize: Dimensions.font_sp16,
-                            color: MyColors.text_color)),
+                    Expanded(
+                                          child: Text(model?.bookName ?? "",
+                                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: Dimensions.font_sp16,
+                              color: MyColors.text_color)),
+                    ),
                             Spacer(),
                     Text("${model?.score} 分",style: TextStyle(fontSize: Dimensions.font_sp16,color: MyColors().getThemeColor()),)        
                   ],

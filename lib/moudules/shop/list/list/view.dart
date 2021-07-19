@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/constants.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/empty/common_empty.dart';
 import 'package:flutter_dingdian/moudules/shop/list/list/widgets/commend_item.dart';
 import 'package:flutter_dingdian/moudules/shop/list/list/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/shop/list/model/list_model.dart';
@@ -40,20 +41,24 @@ class _ShopBookListPageState extends State<ShopBookListPage>
           ),
           Expanded(
               child: FunStateRefresherObx(
+            onEmpty: CommonEmptyWidget(),
+            onError: (error) {
+              _logic.pullToRefresh();
+            },
             builder: () => ListView.separated(
                 itemBuilder: (context, index) {
                   ShopBookListModel model = _logic.list[index];
                   if (state.selectModel?.key == "commend") {
                     return GestureDetector(
                       onTap: () => _logic.jumpToDetail(model.listId.toString()),
-                                          child: ShopBookListCommendItem(
+                      child: ShopBookListCommendItem(
                         model: model,
                       ),
                     );
                   } else {
                     return GestureDetector(
                       onTap: () => _logic.jumpToDetail(model.listId.toString()),
-                                          child: ShopBookListItem(
+                      child: ShopBookListItem(
                         model: model,
                       ),
                     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dingdian/moudules/common/widgets/error/common_error.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/choose/widgets/banner.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/choose/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/choose/widgets/menu.dart';
@@ -19,8 +20,10 @@ class ShopChoosePage extends StatelessWidget {
     return FunStateObx(
       controller: logic,
       onLoading: const Center(child: CircularProgressIndicator()),
-      onError: (error) => Container(
-        child: Text("出错了"),
+      onError: (error) => CommonErrorWidget(
+        click: () {
+          logic.onLoadData();
+        },
       ),
       builder: () {
         return SmartRefresher(
@@ -43,7 +46,9 @@ class ShopChoosePage extends StatelessWidget {
                 );
               } else {
                 BookChooseModel model = logic.state.choose![index - 1];
-                return ShopChooseItem(model: model,);
+                return ShopChooseItem(
+                  model: model,
+                );
               }
             },
             itemCount: logic.state.choose!.length + 1,
