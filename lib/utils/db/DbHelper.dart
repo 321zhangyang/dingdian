@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flustars/flustars.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
+import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -78,6 +79,8 @@ class DbHelper {
     await db.execute("CREATE TABLE IF NOT EXISTS $_tableName1("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "chapterId INTEGER,"
+        "pId INTEGER,"
+        "nId INTEGER,"
         "name TEXT,"
         "content TEXT,"
         "bookId INTEGER,"
@@ -239,10 +242,40 @@ class DbHelper {
     return cps;
   }
 
+  Future<BookChapterContentModel> getChapter(int chapterId) async {
+    var dbClient = await db1;
+    var list = await dbClient.rawQuery(
+        "select pId,nId,name,content from $_tableName1 where chapterId=?",
+        [chapterId]);
+    print(list);
+    BookChapterContentModel model = BookChapterContentModel();
+    for (Map i in list) {
+      print(i);
+      model.cname = i["name"];
+      model.content = i["content"];
+      model.cid = chapterId;
+      model.nid = i['nId'];
+      model.pid = i['pId'];
+      model.hasContent = 2;
+    }
+    return model;
+  }
+
   // 清除章节
   Future<Null> clearChapters(int bookId) async {
-    var dbClient = await db;
+    var dbClient = await db1;
     await dbClient
-        .rawDelete("delete from $_tableName where bookId=?", [bookId]);
+        .rawDelete("delete from $_tableName1 where bookId=?", [bookId]);
+  }
+
+  //更新章节
+  Future<Null> udpChapter(
+      String content, int pid, int nid, int chapterId) async {
+    var dbClient = await db1;
+    var batch = dbClient.batch();
+    batch.rawUpdate(
+        "update $_tableName1 set content=?,pId=?,nId=?,hasContent=2 where chapterId=?",
+        [content, pid, nid, chapterId]);
+    await batch.commit(noResult: true);
   }
 }

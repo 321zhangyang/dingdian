@@ -25,6 +25,7 @@ void main() async {
     init: ThemeLogic(),
     initState: (_) {},
     builder: (_) {
+      
       return FunFlutterConfiguration(
         funStateBehavior: FunStateBehavior(
           /// 全局分页参数设置

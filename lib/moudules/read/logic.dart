@@ -15,6 +15,7 @@ import 'package:flutter_dingdian/moudules/read/view.dart';
 import 'package:flutter_dingdian/moudules/shelf/logic.dart';
 import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
+import 'package:flutter_dingdian/utils/toast/toast.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
 import 'package:list_group_handler/list_group_handler.dart';
@@ -58,12 +59,6 @@ class BookReadLogic extends FunStateActionController {
     DbHelper.instance.addChapters(state.allChapters, bookId);
   }
 
-  //获取章节内容
-  loadChapter(int index) {
-    BookChapterContentModel contentModel = BookChapterContentModel();
-    if (index < 0) {}
-  }
-
   //选择章节的操作
   changeChapter(int index) {
     state.bookModel!.cChapter = index;
@@ -97,25 +92,31 @@ class BookReadLogic extends FunStateActionController {
       String chapterId, int index) async {
     TwoList chapter = state.allChapters[index];
     if (chapter.hasContent != 2) {
-      //没有内容,网路请求内容,然后数据库保存,存储包括 id 章节内容 前一张 后一张 
-      
-    }else {
+      //没有内容,网路请求内容,然后数据库保存,存储包括 id 章节内容 前一张 后一张
+      //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
+      String bookId = state.bookModel!.id.toString();
+      int path = int.parse(bookId.substring(0, bookId.length - 3)) + 1;
+      String url = "/$path/$bookId/$chapterId.html";
+      BookChapterContentModel model =
+          await _contentRepository.getBookChapterContent(url);
+
+      //由于返回的章节头部和尾部带有多余字符,这里除去头部和尾部多余的字符,否则会影响排版
+      model.content = model.content?.substring(2);
+      model.content = model.content?.replaceAll("\f\t\n", "");
+      model.pages = parseContent(model.content ?? "", model.cname ?? "");
+      DbHelper.instance.udpChapter(model.content ?? "", model.pid ?? -1,
+          model.nid ?? -1, int.parse(chapterId));
+      chapter.hasContent = 2;
+      return model;
+    } else {
       //有内容直接数据库,取出来,构造一个新的contentmodel
-
+      BookChapterContentModel model =
+          await DbHelper.instance.getChapter(int.parse(chapterId));
+      model.id = state.bookModel!.id;
+      model.name = state.bookModel!.name;
+      model.pages = parseContent(model.content ?? "", model.cname ?? "");
+      return model;
     }
-
-    //拼接地址 id删除后三位 将剩余的id + 1,然后再拼接
-    String bookId = state.bookModel!.id.toString();
-    int path = int.parse(bookId.substring(0, bookId.length - 3)) + 1;
-    String url = "/$path/$bookId/$chapterId.html";
-    BookChapterContentModel model =
-        await _contentRepository.getBookChapterContent(url);
-
-    //犹豫返回的章节头部和尾部带有多余字符,这里除去头部和尾部多余的字符,否则会影响排版
-    model.content = model.content?.substring(2);
-    model.content = model.content?.replaceAll("\f\t\n", "");
-    model.pages = parseContent(model.content ?? "", model.cname ?? "");
-    return model;
   }
 
   //对章节内容机型解析
@@ -147,7 +148,6 @@ class BookReadLogic extends FunStateActionController {
     var curWid = details.globalPosition.dx;
     var curH = details.globalPosition.dy;
     if ((curWid > 0 && curWid < space)) {
-      print("前一页");
       changeCoverPage(-1);
     } else if ((curWid > space) &&
         (curWid < 2 * space) &&
@@ -155,7 +155,6 @@ class BookReadLogic extends FunStateActionController {
       print("展示菜单");
       showMenu();
     } else if ((curWid > space * 2)) {
-      print("后一页");
       changeCoverPage(1);
     }
   }
@@ -163,7 +162,6 @@ class BookReadLogic extends FunStateActionController {
   //换页操作
   Future<void> changeCoverPage(var offsetDifference) async {
     int idx = state.bookModel?.cChapterPage ?? 0;
-    print(idx);
     int curLen = (state.cContentModel?.pages?.length ?? 0);
     if (idx == curLen - 1 && offsetDifference > 0) {
       int tempCur = state.bookModel!.cChapter! + 1;
@@ -174,14 +172,15 @@ class BookReadLogic extends FunStateActionController {
         state.bookModel!.cChapter = state.bookModel!.cChapter! + 1;
         state.pContentModel = state.cContentModel;
         state.cContentModel = state.nContentModel;
+        state.bookModel?.cChapterPage = 0;
+        update();
+
         if (state.cContentModel!.nid! > 0) {
-          state.nContentModel =
-              await getBookChapterContent(state.cContentModel!.nid.toString(), tempCur);
+          state.nContentModel = await getBookChapterContent(
+              state.cContentModel!.nid.toString(), tempCur + 1);
         } else {
           state.nContentModel = null;
         }
-        state.bookModel?.cChapterPage = 0;
-        update();
         return;
       }
     }
@@ -197,9 +196,10 @@ class BookReadLogic extends FunStateActionController {
       state.bookModel!.cChapter = state.bookModel!.cChapter! - 1;
       state.bookModel!.cChapterPage = state.cContentModel!.pages!.length - 1;
       update();
+      
       if (state.cContentModel!.pid! > 0) {
-        state.pContentModel =
-            await getBookChapterContent(state.cContentModel!.pid.toString(),tempCur);
+        state.pContentModel = await getBookChapterContent(
+            state.cContentModel!.pid.toString(), tempCur - 1);
       } else {
         state.pContentModel = null;
       }
@@ -273,7 +273,6 @@ class BookReadLogic extends FunStateActionController {
         fontSize: state.configModel!.font!.toDouble(),
         color: MyColors.text_color,
         height: state.configModel!.height);
-    print("state.configModel!.height ${state.configModel!.height}");
     state.cContentModel!.pages = parseContent(
         state.cContentModel!.content!, state.cContentModel!.cname!);
     if (state.pContentModel != null) {
@@ -296,9 +295,9 @@ class BookReadLogic extends FunStateActionController {
     update();
   }
 
+  //切换换页方式
   changeTurnType(int index) {
     state.configModel!.turnType = index;
-
     update();
   }
 
