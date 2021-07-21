@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
+import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
+import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/read/logic.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
 import 'package:get/get.dart';
@@ -52,9 +54,15 @@ class _ReadDirectoryWidgetState extends State<ReadDirectoryWidget> {
             child: ListView.builder(
               controller: _scrollController,
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              itemBuilder: (context, index) =>
-                  _logic.state.groupHandler!.cellAtIndex(index),
-              itemCount: _logic.state.groupHandler!.allItemCount,
+              itemBuilder: (context, index) {
+                TwoList item = _logic.state.dirChapters[index];
+                return BookDirectoryItemWidget(
+                  item: item,
+                  isDownload: item.hasContent == 2 ? true : false,
+                  select: item.id == _logic.state.cContentModel!.cid!,
+                );
+              },
+              itemCount: _logic.state.dirChapters.length,
             ),
           ),
         ));

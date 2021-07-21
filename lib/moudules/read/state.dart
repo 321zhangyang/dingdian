@@ -11,6 +11,8 @@ class BookReadState {
   // 图书所有章节
   BookDirectoryModel? chapterModel;
   List<TwoList> allChapters = [];
+  //存放目录页用的
+  List<TwoList> dirChapters = [];
   // 当前章节内容
   BookChapterContentModel? cContentModel;
   // 下一章节内容

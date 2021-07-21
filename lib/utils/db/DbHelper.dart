@@ -212,7 +212,7 @@ class DbHelper {
   }
 
   /// 添加章节
-  Future<Null> addChapters(List<TwoList> cps, String bookId) async {
+  Future<Null> addChapters(List<TwoList> cps, int bookId) async {
     var dbClient = await db1;
     var batch = dbClient.batch();
     for (var i = 0; i < cps.length; i++) {
@@ -230,7 +230,6 @@ class DbHelper {
     var list = await dbClient.rawQuery(
         "select hasContent,chapterId,name from $_tableName1 where bookId=?",
         [bookId]);
-    print(list);
     List<TwoList> cps = [];
     for (Map i in list) {
       TwoList cp = TwoList();
@@ -278,4 +277,12 @@ class DbHelper {
         [content, pid, nid, chapterId]);
     await batch.commit(noResult: true);
   }
+
+   Future<bool> getHasContent(int chapterId) async {
+    var dbClient = await db1;
+    var list = await dbClient.rawQuery(
+        "select hasContent from $_tableName where chapterId=?", [chapterId]);
+    return 2 == list[0]['hasContent'];
+  }
+
 }

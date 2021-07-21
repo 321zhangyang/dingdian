@@ -29,16 +29,18 @@ class BookReadLogic extends FunStateActionController {
 
   //获取图书记录等信息
   getBookRecord() async {
-    if (SpUtil.haveKey(state.bookModel!.id!.toString()) == true) {
-      state.allChapters =
-          await DbHelper.instance.getChapters(state.bookModel!.id!);
-      if (state.allChapters.length == 0) {
-        await getBookChapters();
-      }
-    } else {
-      await getBookChapters();
-      await SpUtil.putString(state.bookModel!.id.toString(), "1");
-    }
+    // if (SpUtil.haveKey(state.bookModel!.id!.toString()) == true) {
+    //   state.allChapters =
+    //       await DbHelper.instance.getChapters(state.bookModel!.id!);
+    //   if (state.allChapters.length == 0) {
+    //     await getBookChapters();
+    //   }
+    // } else {
+    //   await getBookChapters();
+    //   await SpUtil.putString(state.bookModel!.id.toString(), "1");
+    // }
+
+    await getBookChapters();
     resetContent(state.bookModel!.cChapter!);
   }
 
@@ -50,13 +52,25 @@ class BookReadLogic extends FunStateActionController {
     String url = "$index/$bookId/index.html";
     BookDirectoryModel model = await _chapterRepository.getBookDirectory(url);
     state.chapterModel = model;
+    List allChapters = [];
     //将所有可阅读的章节,分离出来,方便取用,以及跳转
     for (OneList one in state.chapterModel!.list!) {
       for (TwoList two in one.list!) {
-        state.allChapters.add(two);
+        allChapters.add(two);
       }
     }
-    DbHelper.instance.addChapters(state.allChapters, bookId);
+
+    //获取所有存储的章节内容
+    List tempChapters =
+        await DbHelper.instance.getChapters(state.bookModel!.id!);
+    //如果存储的内容小于现在获取的 就更新一下
+    if (tempChapters.length < allChapters.length) {
+      List<TwoList> addChapters =
+          state.allChapters.sublist(tempChapters.length);
+      await DbHelper.instance.addChapters(addChapters, int.parse(bookId));
+    }
+    state.allChapters = await DbHelper.instance.getChapters(int.parse(bookId));
+    state.dirChapters = state.allChapters;
   }
 
   //选择章节的操作
@@ -196,7 +210,7 @@ class BookReadLogic extends FunStateActionController {
       state.bookModel!.cChapter = state.bookModel!.cChapter! - 1;
       state.bookModel!.cChapterPage = state.cContentModel!.pages!.length - 1;
       update();
-      
+
       if (state.cContentModel!.pid! > 0) {
         state.pContentModel = await getBookChapterContent(
             state.cContentModel!.pid.toString(), tempCur - 1);
@@ -229,13 +243,9 @@ class BookReadLogic extends FunStateActionController {
 
   //对目录进行排序
   sortTheDirectory() {
-    //将章节信息进行存储
-    _initGroupHandler();
+    // //将章节信息进行存储
     state.positive = !state.positive;
-    state.chapterModel?.list = state.chapterModel!.list!.reversed.toList();
-    for (var item in state.chapterModel!.list!) {
-      item.list = item.list!.reversed.toList();
-    }
+    state.dirChapters = state.dirChapters.reversed.toList();
     update();
   }
 
@@ -375,49 +385,50 @@ class BookReadLogic extends FunStateActionController {
     return getBookChapters();
   }
 
-  //初始化章节内容的Handler
-  _initGroupHandler() {
-    state.groupHandler = ListViewGroupHandler(
-      //日志开关
-      openLog: false,
-      //分组数量，需要自行根据data设置，默认1
-      numberOfSections: state.chapterModel!.list!.length,
-      //每组cell个数，需要自行根据data设置
-      numberOfRowsInSection: (section) =>
-          state.chapterModel!.list![section].list!.length,
-      //indexPath: IndexPath(section,row,index)
-      cellForRowAtIndexPath: (indexPath) => GestureDetector(
-        onTap: () {
-          Navigator.pop(state.readKey.currentContext!);
-          TwoList model =
-              state.chapterModel!.list![indexPath.section].list![indexPath.row];
-          int idx = 0;
-          Future.delayed(Duration(microseconds: 300)).then((value) {
-            for (var i = 0; i < state.allChapters.length; i++) {
-              TwoList temp = state.allChapters[i];
-              if (temp.id == model.id) {
-                idx = i;
-                changeChapter(idx);
-                return;
-              }
-            }
-          });
-        },
-        child: BookDirectoryItemWidget(
-            item: state
-                .chapterModel!.list![indexPath.section].list![indexPath.row],
-            select: state.chapterModel!.list![indexPath.section]
-                    .list![indexPath.row].id ==
-                state.cContentModel!.cid),
-      ),
-      //头部
-      headerForSection: (section) => BookDirectoryHeaderWidget(
-        name: state.chapterModel!.list![section].name,
-      ),
-      //占位Placeholder
-      emptyPlaceholder: () {
-        return BookDirectoryItemWidget();
-      },
-    );
-  }
+  // //初始化章节内容的Handler
+  // _initGroupHandler() {
+  //   state.groupHandler = ListViewGroupHandler(
+  //     //日志开关
+  //     openLog: false,
+  //     //分组数量，需要自行根据data设置，默认1
+  //     numberOfSections: state.chapterModel!.list!.length,
+  //     //每组cell个数，需要自行根据data设置
+  //     numberOfRowsInSection: (section) =>
+  //         state.chapterModel!.list![section].list!.length,
+  //     //indexPath: IndexPath(section,row,index)
+  //     cellForRowAtIndexPath: (indexPath) => GestureDetector(
+  //       onTap: () {
+  //         Navigator.pop(state.readKey.currentContext!);
+  //         TwoList model =
+  //             state.chapterModel!.list![indexPath.section].list![indexPath.row];
+  //         int idx = 0;
+  //         Future.delayed(Duration(microseconds: 300)).then((value) {
+  //           for (var i = 0; i < state.allChapters.length; i++) {
+  //             TwoList temp = state.allChapters[i];
+  //             if (temp.id == model.id) {
+  //               idx = i;
+  //               changeChapter(idx);
+  //               return;
+  //             }
+  //           }
+  //         });
+  //       },
+  //       child: BookDirectoryItemWidget(
+  //           item: state
+  //               .chapterModel!.list![indexPath.section].list![indexPath.row],
+  //           select: state.chapterModel!.list![indexPath.section]
+  //                   .list![indexPath.row].id ==
+  //               state.cContentModel!.cid,
+  //               isDownload: await DbHelper.instance.getHasContent(state.cContentModel!.cid!),),
+  //     ),
+  //     //头部
+  //     headerForSection: (section) => BookDirectoryHeaderWidget(
+  //       name: state.chapterModel!.list![section].name,
+  //     ),
+  //     //占位Placeholder
+  //     emptyPlaceholder: () {
+  //       return BookDirectoryItemWidget();
+  //     },
+  //   );
+  // }
 }
