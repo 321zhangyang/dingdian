@@ -1,16 +1,16 @@
-# flutter_dingdian
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# 顶点小说 Flutter版本
+使用flutter写的一款小说阅读软件
+## 使用技术
+getx做状态管理和路由管理
+dio进行网络请求
+hive进行简单数据存储
+sqflite进行图书内容存储
+## 已完成功能
+基本功能开发,包括图书搜索,详情查看,图书阅读,书架管理等
+## 截图
+<img src='https://imgtu.com/i/W0pSDs'>
+<img src='https://imgtu.com/i/W0Szuj'>
+<img src='https://imgtu.com/i/W0pCEq'>
+<img src='https://imgtu.com/i/W0SvvQ'>
+<img src='https://imgtu.com/i/W0SvvQ'>
+<img src='https://imgtu.com/i/W0pPU0'>
