@@ -7,6 +7,8 @@ hive进行简单数据存储
 sqflite进行图书内容存储
 ## 已完成功能
 基本功能开发,包括图书搜索,详情查看,图书阅读,书架管理等
+## 待完成
+登录 图书下载 个人中心各个菜单
 ## 截图
 ![8WCElhutTFAzgpi](https://i.loli.net/2021/07/22/8WCElhutTFAzgpi.png)
 ![2Qi1bYXGzp7rnBs](https://i.loli.net/2021/07/22/2Qi1bYXGzp7rnBs.png) 
