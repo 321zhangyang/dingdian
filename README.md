@@ -8,7 +8,7 @@ sqflite进行图书内容存储
 ## 已完成功能
 基本功能开发,包括图书搜索,详情查看,图书阅读,书架管理等
 ## 截图
-<img src='https://imgtu.com/i/W0pSDs'>
+[![W0pPU0.png](https://z3.ax1x.com/2021/07/22/W0pPU0.png)](https://imgtu.com/i/W0pPU0)
 <img src='https://imgtu.com/i/W0Szuj'>
 <img src='https://imgtu.com/i/W0pCEq'>
 <img src='https://imgtu.com/i/W0SvvQ'>
