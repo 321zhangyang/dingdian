@@ -56,10 +56,19 @@ class _ReadDirectoryWidgetState extends State<ReadDirectoryWidget> {
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               itemBuilder: (context, index) {
                 TwoList item = _logic.state.dirChapters[index];
-                return BookDirectoryItemWidget(
-                  item: item,
-                  isDownload: item.hasContent == 2 ? true : false,
-                  select: item.id == _logic.state.cContentModel!.cid!,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pop(_logic.state.readKey.currentContext!);
+                    Future.delayed(Duration(microseconds: 300))
+                        .then((value) {
+                           _logic.changeChapter(index);
+                        });
+                  },
+                  child: BookDirectoryItemWidget(
+                    item: item,
+                    isDownload: item.hasContent == 2 ? true : false,
+                    select: item.id == _logic.state.cContentModel!.cid!,
+                  ),
                 );
               },
               itemCount: _logic.state.dirChapters.length,

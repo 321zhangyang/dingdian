@@ -14,12 +14,10 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
+ await initHive();
   await DenpendencyInjection.init();
-  await Hive.initFlutter();
   await SpUtil.getInstance();
-  Hive.registerAdapter(BookDetailInfoModelAdapter());
-  Hive.registerAdapter(BookVoteAdapter());
-  Hive.registerAdapter(BookReadConfigModelAdapter());
+
   WidgetsFlutterBinding.ensureInitialized();
   runApp(GetBuilder<ThemeLogic>(
     init: ThemeLogic(),
@@ -53,4 +51,11 @@ void hideKeyboard(BuildContext context) {
   if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
     FocusManager.instance.primaryFocus?.unfocus();
   }
+}
+
+  initHive() async{
+    await Hive.initFlutter();
+    Hive.registerAdapter(BookDetailInfoModelAdapter());
+  Hive.registerAdapter(BookVoteAdapter());
+  Hive.registerAdapter(BookReadConfigModelAdapter());
 }

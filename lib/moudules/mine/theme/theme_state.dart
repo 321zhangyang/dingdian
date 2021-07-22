@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeState {
-  Color themeColor = Colors.blue;
+  Color themeColor = Colors.white;
   Map<String, Color> themeColorMap = {
     '大地棕': Color.fromRGBO(200, 142, 94, 1),
     '经典蓝':  Color.fromRGBO(0, 163, 237, 1),

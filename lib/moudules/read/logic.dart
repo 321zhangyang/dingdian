@@ -29,17 +29,6 @@ class BookReadLogic extends FunStateActionController {
 
   //获取图书记录等信息
   getBookRecord() async {
-    // if (SpUtil.haveKey(state.bookModel!.id!.toString()) == true) {
-    //   state.allChapters =
-    //       await DbHelper.instance.getChapters(state.bookModel!.id!);
-    //   if (state.allChapters.length == 0) {
-    //     await getBookChapters();
-    //   }
-    // } else {
-    //   await getBookChapters();
-    //   await SpUtil.putString(state.bookModel!.id.toString(), "1");
-    // }
-
     await getBookChapters();
     resetContent(state.bookModel!.cChapter!);
   }
@@ -52,7 +41,7 @@ class BookReadLogic extends FunStateActionController {
     String url = "$index/$bookId/index.html";
     BookDirectoryModel model = await _chapterRepository.getBookDirectory(url);
     state.chapterModel = model;
-    List allChapters = [];
+    List<TwoList> allChapters = [];
     //将所有可阅读的章节,分离出来,方便取用,以及跳转
     for (OneList one in state.chapterModel!.list!) {
       for (TwoList two in one.list!) {
@@ -66,7 +55,7 @@ class BookReadLogic extends FunStateActionController {
     //如果存储的内容小于现在获取的 就更新一下
     if (tempChapters.length < allChapters.length) {
       List<TwoList> addChapters =
-          state.allChapters.sublist(tempChapters.length);
+          allChapters.sublist(tempChapters.length);
       await DbHelper.instance.addChapters(addChapters, int.parse(bookId));
     }
     state.allChapters = await DbHelper.instance.getChapters(int.parse(bookId));
