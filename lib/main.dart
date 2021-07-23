@@ -14,16 +14,13 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
- await initHive();
+  await initHive();
   await DenpendencyInjection.init();
   await SpUtil.getInstance();
-
+ 
   WidgetsFlutterBinding.ensureInitialized();
   runApp(GetBuilder<ThemeLogic>(
-    init: ThemeLogic(),
-    initState: (_) {},
     builder: (_) {
-      
       return FunFlutterConfiguration(
         funStateBehavior: FunStateBehavior(
           /// 全局分页参数设置
@@ -53,9 +50,9 @@ void hideKeyboard(BuildContext context) {
   }
 }
 
-  initHive() async{
-    await Hive.initFlutter();
-    Hive.registerAdapter(BookDetailInfoModelAdapter());
+initHive() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(BookDetailInfoModelAdapter());
   Hive.registerAdapter(BookVoteAdapter());
   Hive.registerAdapter(BookReadConfigModelAdapter());
 }

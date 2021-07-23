@@ -11,5 +11,7 @@ class DenpendencyInjection {
     await Get.putAsync(() => NetConfigController().init());
     //  网络请求
     Get.put(NetUtils());
+
+     Get.put(ThemeLogic());
   }
 }
