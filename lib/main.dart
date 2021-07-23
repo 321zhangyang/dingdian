@@ -17,7 +17,6 @@ void main() async {
   await initHive();
   await DenpendencyInjection.init();
   await SpUtil.getInstance();
- 
   WidgetsFlutterBinding.ensureInitialized();
   runApp(GetBuilder<ThemeLogic>(
     builder: (_) {

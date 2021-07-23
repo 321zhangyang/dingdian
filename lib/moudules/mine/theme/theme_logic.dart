@@ -19,6 +19,7 @@ class ThemeLogic extends GetxController {
     super.onInit();
 
     state.colorKey = await LocalBookConfigRepository.getThemeKey();
+    print(state.colorKey);
     state.themeColor = state.themeColorMap[state.colorKey]!;
   }
 }
