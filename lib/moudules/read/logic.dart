@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
@@ -11,8 +15,11 @@ import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/moudules/read/api/repository.dart';
 import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
+import 'package:flutter_dingdian/moudules/read/model/font_model.dart';
 import 'package:flutter_dingdian/moudules/read/view.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/font_family.dart';
 import 'package:flutter_dingdian/moudules/shelf/logic.dart';
+import 'package:flutter_dingdian/utils/cache/cache_util.dart';
 import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
 import 'package:flutter_dingdian/utils/toast/toast.dart';
@@ -54,8 +61,7 @@ class BookReadLogic extends FunStateActionController {
         await DbHelper.instance.getChapters(state.bookModel!.id!);
     //如果存储的内容小于现在获取的 就更新一下
     if (tempChapters.length < allChapters.length) {
-      List<TwoList> addChapters =
-          allChapters.sublist(tempChapters.length);
+      List<TwoList> addChapters = allChapters.sublist(tempChapters.length);
       await DbHelper.instance.addChapters(addChapters, int.parse(bookId));
     }
     state.allChapters = await DbHelper.instance.getChapters(int.parse(bookId));
@@ -266,12 +272,29 @@ class BookReadLogic extends FunStateActionController {
     changeTextContent();
   }
 
+  //更换字体
+  changeFontFamily(String fontFamily) {
+    if (fontFamily != "Roboto") {
+      readFont(fontFamily);
+    }
+    state.configModel!.fontFamily = fontFamily;
+    state.configModel!.save();
+    changeTextContent();
+    update();
+  }
+
   //更改完成设置后,重新处理文字内容
   changeTextContent() {
     state.contentStyle = TextStyle(
         fontSize: state.configModel!.font!.toDouble(),
         color: MyColors.text_color,
-        height: state.configModel!.height);
+        height: state.configModel!.height,
+        fontFamily: state.configModel!.fontFamily);
+    state.titleStyle = TextStyle(
+        fontSize: 30,
+        color: MyColors.text_color,
+        fontWeight: FontWeight.bold,
+        fontFamily: state.configModel!.fontFamily);
     state.cContentModel!.pages = parseContent(
         state.cContentModel!.content!, state.cContentModel!.cname!);
     if (state.pContentModel != null) {
@@ -341,10 +364,50 @@ class BookReadLogic extends FunStateActionController {
     return books.map((e) => e.id).toList().contains(bookId);
   }
 
+  //保存字体
+  saveFontFamily(String url, String key) async {
+    try {
+      await CatcheUtil.instanceFont.downloadFile(url, key: key);
+      state.fontList = await fetchFontData();
+      update();
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  //获取字体资源
+  Future<List<FontInfoModel>> fetchFontData() async {
+    List<FontInfoModel> fontInfos = [];
+    for (int i = 0; i < state.fonts.length; i++) {
+      String key = state.fonts.keys.elementAt(i);
+      String value = state.fonts.values.elementAt(i);
+      var fileInfo2 = await _getFileInfo(key);
+      fontInfos.add(FontInfoModel(key, value, fileInfo2));
+    }
+    print(fontInfos);
+    return fontInfos;
+  }
+
+  //读取字体
+  Future<void> readFont(String fontName) async {
+    FileInfo? file = await CatcheUtil.instanceFont.getFileFromCache(fontName);
+    var fontLoader = FontLoader(fontName);
+    Uint8List readAsBytes = file!.file.readAsBytesSync();
+
+    fontLoader.addFont(Future.value(ByteData.view(readAsBytes.buffer)));
+    await fontLoader.load();
+  }
+//
+
+  Future<FileInfo?> _getFileInfo(String key) async {
+    return await CatcheUtil.instanceFont.getFileFromCache(key);
+  }
+
   @override
   void onInit() async {
     super.onInit();
     changeLoading();
+
     state.bookModel = Get.arguments["model"];
     var configModel = await LocalBookConfigRepository.getBookReadConfigModel();
     if (configModel == null) {
@@ -354,70 +417,29 @@ class BookReadLogic extends FunStateActionController {
       model.index = 0;
       model.theme = "theme2_read_bg";
       model.turnType = 0;
+      model.fontFamily = "Roboto";
       LocalBookConfigRepository.saveBookReadConfig(model);
       state.configModel = model;
     } else {
       state.configModel = configModel;
     }
+    print(state.configModel!.fontFamily);
     state.titleStyle = TextStyle(
-        fontSize: 30, color: MyColors.text_color, fontWeight: FontWeight.bold);
+        fontSize: 30,
+        color: MyColors.text_color,
+        fontWeight: FontWeight.bold,
+        fontFamily: configModel.fontFamily);
     state.contentStyle = TextStyle(
         fontSize: state.configModel!.font!.toDouble(),
         color: MyColors.text_color,
-        height: state.configModel!.height);
-    // getBookChapters();
+        height: state.configModel!.height,
+        fontFamily: configModel.fontFamily);
     getBookRecord();
+    state.fontList = await fetchFontData();
   }
 
   @override
   Future onLoadData() {
     return getBookChapters();
   }
-
-  // //初始化章节内容的Handler
-  // _initGroupHandler() {
-  //   state.groupHandler = ListViewGroupHandler(
-  //     //日志开关
-  //     openLog: false,
-  //     //分组数量，需要自行根据data设置，默认1
-  //     numberOfSections: state.chapterModel!.list!.length,
-  //     //每组cell个数，需要自行根据data设置
-  //     numberOfRowsInSection: (section) =>
-  //         state.chapterModel!.list![section].list!.length,
-  //     //indexPath: IndexPath(section,row,index)
-  //     cellForRowAtIndexPath: (indexPath) => GestureDetector(
-  //       onTap: () {
-  //         Navigator.pop(state.readKey.currentContext!);
-  //         TwoList model =
-  //             state.chapterModel!.list![indexPath.section].list![indexPath.row];
-  //         int idx = 0;
-  //         Future.delayed(Duration(microseconds: 300)).then((value) {
-  //           for (var i = 0; i < state.allChapters.length; i++) {
-  //             TwoList temp = state.allChapters[i];
-  //             if (temp.id == model.id) {
-  //               idx = i;
-  //               changeChapter(idx);
-  //               return;
-  //             }
-  //           }
-  //         });
-  //       },
-  //       child: BookDirectoryItemWidget(
-  //           item: state
-  //               .chapterModel!.list![indexPath.section].list![indexPath.row],
-  //           select: state.chapterModel!.list![indexPath.section]
-  //                   .list![indexPath.row].id ==
-  //               state.cContentModel!.cid,
-  //               isDownload: await DbHelper.instance.getHasContent(state.cContentModel!.cid!),),
-  //     ),
-  //     //头部
-  //     headerForSection: (section) => BookDirectoryHeaderWidget(
-  //       name: state.chapterModel!.list![section].name,
-  //     ),
-  //     //占位Placeholder
-  //     emptyPlaceholder: () {
-  //       return BookDirectoryItemWidget();
-  //     },
-  //   );
-  // }
 }

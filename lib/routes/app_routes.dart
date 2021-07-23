@@ -24,4 +24,7 @@ class Routes {
 
   //阅读
   static const READ = 'book/read';
+
+  //字体
+  static const FONT = 'book/read/font';
 }

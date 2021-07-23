@@ -16,7 +16,7 @@ class Toast {
 //    );
   }
 
-  static void showLoadingText({String msg = '加载中...'}) {
+  static void showLoadingText(String s, {String msg = '加载中...'}) {
     EasyLoading.show(status: msg);
   }
 

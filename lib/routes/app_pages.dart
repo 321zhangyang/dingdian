@@ -2,6 +2,7 @@ import 'package:flutter_dingdian/moudules/detail/direcory/view.dart';
 import 'package:flutter_dingdian/moudules/mine/history/view.dart';
 import 'package:flutter_dingdian/moudules/mine/theme/theme_view.dart';
 import 'package:flutter_dingdian/moudules/read/view.dart';
+import 'package:flutter_dingdian/moudules/read/widgets/font_family.dart';
 import 'package:flutter_dingdian/moudules/search/view.dart';
 import 'package:flutter_dingdian/moudules/shop/category/list/view.dart';
 import 'package:flutter_dingdian/moudules/shop/choose/list/view.dart';
@@ -54,6 +55,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.READ,
       page: () => BookReadPage(),
-    )
+    ),
+    GetPage(name: Routes.FONT, page: () => ReadFontFamilyPage(),)
   ];
 }

@@ -18,4 +18,7 @@ class BookReadConfigModel extends HiveObject {
   @HiveField(4)
   //行间距
   int? turnType;
+  @HiveField(5)
+  //字体类型
+  String? fontFamily;
 }
