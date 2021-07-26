@@ -325,8 +325,12 @@ class BookReadLogic extends FunStateActionController {
 
   // 状态保存.保存阅读信息
   saveReadRecord() {
+    //更新数据库内容
     DbHelper.instance.updBookProcess(state.bookModel!.cChapter!,
         state.bookModel!.cChapterPage!, state.bookModel!.id!);
+    //刷新书架页面内容
+     Get.find<BookShelfLogic>().sort(state.bookModel!);
+    Get.find<BookShelfLogic>().pullToRefresh();
   }
 
   //是否提示添加书架
@@ -384,7 +388,6 @@ class BookReadLogic extends FunStateActionController {
       var fileInfo2 = await _getFileInfo(key);
       fontInfos.add(FontInfoModel(key, value, fileInfo2));
     }
-    print(fontInfos);
     return fontInfos;
   }
 
@@ -423,7 +426,6 @@ class BookReadLogic extends FunStateActionController {
     } else {
       state.configModel = configModel;
     }
-    print(state.configModel!.fontFamily);
     state.titleStyle = TextStyle(
         fontSize: 30,
         color: MyColors.text_color,

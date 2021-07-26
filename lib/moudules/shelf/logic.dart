@@ -28,10 +28,10 @@ class BookShelfLogic extends FunStateListRefresherController {
     //跳转阅读
     Get.toNamed(Routes.READ, arguments: {"model": model});
 
-    _sort(model);
+    sort(model);
   }
 
-  _sort(BookDetailInfoModel model) async {
+  sort(BookDetailInfoModel model) async {
     var book = model;
     book.sortTime = DateUtil.getNowDateMs();
 
