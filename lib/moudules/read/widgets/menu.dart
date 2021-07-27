@@ -2,6 +2,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/constant/dimensions.dart';
 import 'package:flutter_dingdian/constant/gaps.dart';
+import 'package:flutter_dingdian/moudules/read/api/repository.dart';
 import 'package:flutter_dingdian/moudules/read/logic.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/background.dart';
 import 'package:flutter_dingdian/moudules/read/widgets/font.dart';
@@ -20,6 +21,7 @@ class ReadBottomMenuWidget extends StatefulWidget {
 class _ReadBottomMenuWidgetState extends State<ReadBottomMenuWidget> {
   Type type = Type.SLIDER;
   final BookReadLogic _logic = Get.put(BookReadLogic());
+ 
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,7 +88,7 @@ class _ReadBottomMenuWidgetState extends State<ReadBottomMenuWidget> {
           )
         ],
       ),
-      onTap: () {
+      onTap: () async {
         if (title == "目录") {
           _logic.showMenu();
           _logic.showDirectory(context);
@@ -102,6 +104,8 @@ class _ReadBottomMenuWidgetState extends State<ReadBottomMenuWidget> {
           });
         }
         if (title == "背景") {
+        
+
           setState(() {
             if (type == Type.BACKGROUND) {
               type = Type.SLIDER;

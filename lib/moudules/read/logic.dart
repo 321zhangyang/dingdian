@@ -7,25 +7,18 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dingdian/constant/colors.dart';
 import 'package:flutter_dingdian/local/local_config_repository.dart';
 import 'package:flutter_dingdian/moudules/detail/api/repository.dart';
-import 'package:flutter_dingdian/moudules/detail/detail/logic.dart';
-import 'package:flutter_dingdian/moudules/detail/direcory/widgets/header.dart';
-import 'package:flutter_dingdian/moudules/detail/direcory/widgets/item.dart';
 import 'package:flutter_dingdian/moudules/detail/model/directory_model.dart';
 import 'package:flutter_dingdian/moudules/detail/model/info_model.dart';
 import 'package:flutter_dingdian/moudules/read/api/repository.dart';
 import 'package:flutter_dingdian/moudules/read/model/config_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/content_model.dart';
 import 'package:flutter_dingdian/moudules/read/model/font_model.dart';
-import 'package:flutter_dingdian/moudules/read/view.dart';
-import 'package:flutter_dingdian/moudules/read/widgets/font_family.dart';
 import 'package:flutter_dingdian/moudules/shelf/logic.dart';
 import 'package:flutter_dingdian/utils/cache/cache_util.dart';
 import 'package:flutter_dingdian/utils/db/DbHelper.dart';
 import 'package:flutter_dingdian/utils/text/text_composition.dart';
-import 'package:flutter_dingdian/utils/toast/toast.dart';
 import 'package:fun_flutter_kit/fun_flutter_kit.dart';
 import 'package:get/get.dart';
-import 'package:list_group_handler/list_group_handler.dart';
 
 import 'state.dart';
 
@@ -125,6 +118,28 @@ class BookReadLogic extends FunStateActionController {
       model.name = state.bookModel!.name;
       model.pages = parseContent(model.content ?? "", model.cname ?? "");
       return model;
+    }
+  }
+
+  downloadContent(int start) async {
+    for (var i = start; i < state.allChapters.length; i++) {
+      TwoList chapter = state.allChapters[i];
+      if (chapter.hasContent != 2) {
+        String bookId = state.bookModel!.id.toString();
+        int path = int.parse(bookId.substring(0, bookId.length - 3)) + 1;
+        String url = "/$path/$bookId/${chapter.id}.html";
+        //延迟1秒再执行 快速请求过多 会导致返回数据有问题
+        await Future.delayed(Duration(seconds: 2));
+        BookChapterContentModel model =
+            await _contentRepository.getBookChapterContent(url);
+        //由于返回的章节头部和尾部带有多余字符,这里除去头部和尾部多余的字符,否则会影响排版
+        model.content = model.content?.substring(2);
+        model.content = model.content?.replaceAll("\f\t\n", "");
+        DbHelper.instance.udpChapter(
+            model.content ?? "", model.pid ?? -1, model.nid ?? -1, chapter.id!);
+      } else {
+        print("已下载 : ${chapter.name}");
+      }
     }
   }
 
@@ -329,7 +344,7 @@ class BookReadLogic extends FunStateActionController {
     DbHelper.instance.updBookProcess(state.bookModel!.cChapter!,
         state.bookModel!.cChapterPage!, state.bookModel!.id!);
     //刷新书架页面内容
-     Get.find<BookShelfLogic>().sort(state.bookModel!);
+    Get.find<BookShelfLogic>().sort(state.bookModel!);
     Get.find<BookShelfLogic>().pullToRefresh();
   }
 

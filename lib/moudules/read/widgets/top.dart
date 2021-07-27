@@ -1,4 +1,5 @@
 import 'package:flustars/flustars.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/read/logic.dart';
 import 'package:flutter_dingdian/utils/image/load_image.dart';
@@ -13,6 +14,20 @@ class ReadTopWidget extends StatelessWidget {
             ScreenUtil.getInstance().statusBarHeight,
         child: AppBar(
           backgroundColor: Color.fromRGBO(0, 0, 0, 1),
+          actions: [
+            GestureDetector(
+              onTap: () async {
+                _logic.showMenu();
+                _showCupertinoActionSheet(context);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 50,
+                height: 40,
+                child: Text("下载"),
+              ),
+            )
+          ],
           leading: GestureDetector(
             onTap: () async {
               if (await _logic
@@ -29,5 +44,41 @@ class ReadTopWidget extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  _showCupertinoActionSheet(BuildContext context) async {
+    var result = await showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return CupertinoActionSheet(
+            title: null,
+            message: null,
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                child: Text('从当前章节下载'),
+                onPressed: () {
+                  Navigator.of(context).pop('delete');
+                  _logic.downloadContent(_logic.state.bookModel!.cChapter!);
+                },
+                isDefaultAction: true,
+              ),
+              CupertinoActionSheetAction(
+                child: Text('全本下载'),
+                onPressed: () {
+                  Navigator.of(context).pop('not delete');
+                  _logic.downloadContent(0);
+                },
+                isDefaultAction: true,
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop('cancel');
+              },
+            ),
+          );
+        });
+    print('$result');
   }
 }
