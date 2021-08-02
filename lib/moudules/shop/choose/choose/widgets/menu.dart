@@ -25,7 +25,7 @@ class ShopChooseMenuWidget extends StatelessWidget {
             crossAxisCount: titles.length,
             mainAxisSpacing: 0,
             crossAxisSpacing: 20,
-            childAspectRatio: 0.85),
+            childAspectRatio: 0.74),
         itemCount: titles.length,
         itemBuilder: (context, index) {
           return GestureDetector(

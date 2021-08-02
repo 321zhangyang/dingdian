@@ -323,14 +323,14 @@ packages:
       name: fun_flutter_kit
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.3"
+    version: "0.0.4"
   get:
     dependency: "direct main"
     description:
       name: get
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.1.4"
+    version: "4.3.4"
   glob:
     dependency: transitive
     description:

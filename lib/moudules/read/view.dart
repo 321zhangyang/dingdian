@@ -40,27 +40,38 @@ class _BookReadPageState extends State<BookReadPage> {
     return FunStateObx(
       controller: logic,
       builder: () {
-        return Scaffold(
-            backgroundColor: Colors.white,
-            key: logic.state.readKey,
-            drawer: Drawer(
-              child: ReadDirectoryWidget(),
-            ),
-            body: Stack(
-              children: [
-                GestureDetector(
-                  child: _CoverPage(),
-                  onTapDown: (details) => logic.tapPage(context, details),
-                  onPanEnd: (details) {
-                    var x = details.velocity.pixelsPerSecond.dx < 0 ? 1 : -1;
-                    logic.changeCoverPage(x);
-                  },
-                ),
-                //隐藏的菜单
-                Offstage(
-                    offstage: logic.state.offstage, child: ReadOffstageWidget())
-              ],
-            ));
+        return WillPopScope(
+          onWillPop: ()  async{
+            if (await logic
+                      .exitsInBookShelfById(logic.state.bookModel!.id!) ==
+                  false) {
+                await logic.confirmAddToShelf(context);
+              }
+            return true;
+          },
+          child: Scaffold(
+              backgroundColor: Colors.white,
+              key: logic.state.readKey,
+              drawer: Drawer(
+                child: ReadDirectoryWidget(),
+              ),
+              body: Stack(
+                children: [
+                  GestureDetector(
+                    child: _CoverPage(),
+                    onTapDown: (details) => logic.tapPage(context, details),
+                    onPanEnd: (details) {
+                      var x = details.velocity.pixelsPerSecond.dx < 0 ? 1 : -1;
+                      logic.changeCoverPage(x);
+                    },
+                  ),
+                  //隐藏的菜单
+                  Offstage(
+                      offstage: logic.state.offstage,
+                      child: ReadOffstageWidget())
+                ],
+              )),
+        );
       },
     );
   }
