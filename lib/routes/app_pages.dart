@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_dingdian/moudules/detail/direcory/view.dart';
+import 'package:flutter_dingdian/moudules/live/channel/view.dart';
+import 'package:flutter_dingdian/moudules/live/play/view.dart';
+import 'package:flutter_dingdian/moudules/live/room/view.dart';
 import 'package:flutter_dingdian/moudules/mine/history/view.dart';
 import 'package:flutter_dingdian/moudules/mine/theme/theme_view.dart';
 import 'package:flutter_dingdian/moudules/read/view.dart';
@@ -56,6 +60,15 @@ abstract class AppPages {
       name: Routes.READ,
       page: () => BookReadPage(),
     ),
-    GetPage(name: Routes.FONT, page: () => ReadFontFamilyPage(),)
+    GetPage(
+      name: Routes.FONT,
+      page: () => ReadFontFamilyPage(),
+    ),
+    //live
+    GetPage(name: Routes.LIVE, page: () => LiveChannelPage()),
+    //room
+    GetPage(name: Routes.ROOM, page: () => LiveRoomPage()),
+    //play
+    GetPage(name: Routes.PLAY, page: () => LivePlayPage())
   ];
 }

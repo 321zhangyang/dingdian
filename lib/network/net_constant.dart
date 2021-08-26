@@ -36,5 +36,6 @@ class NetBaseApi {
     "content" : "https://contentxs.pysmei.com",
     "search" : "https://souxs.leeyegy.com/search.aspx/",
     "user" : "https://userxs.pigqq.com",
+    "live" : "http://api.vipmisss.com:81/"
   };
 }

@@ -27,4 +27,11 @@ class Routes {
 
   //字体
   static const FONT = '/book/read/font';
+
+  //直播
+  static const LIVE = '/live/channel';
+    //直播
+  static const ROOM = '/live/room';
+     //播放
+  static const PLAY = '/live/play';
 }

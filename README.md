@@ -1,4 +1,4 @@
-# 顶点小说 Flutter版本
+# 利用Getx编写的flutter版 顶点小说
 使用flutter写的一款小说阅读软件
 ## 使用技术
 getx做状态管理和路由管理

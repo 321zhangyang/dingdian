@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_dingdian/network/net_constant.dart';
 import 'package:flutter_dingdian/network/net_dio.dart';

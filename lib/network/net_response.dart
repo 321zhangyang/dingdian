@@ -8,7 +8,7 @@ class NetBaseResponse<T> {
 
   NetBaseResponse(this.code, this.message, this.data, this.success);
 
-  NetBaseResponse.fromJson( json) {
+  NetBaseResponse.fromJson(json) {
     code = json[NetResponseConstant.code];
     message = json[NetResponseConstant.message];
     if (json.containsKey(NetResponseConstant.data)) {

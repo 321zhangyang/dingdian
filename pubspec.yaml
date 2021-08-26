@@ -66,6 +66,8 @@ dependencies:
   event_bus: ^2.0.0
   oktoast: ^3.0.0
   flutter_cache_manager: ^3.1.2
+  # 视频播放插件
+  fijkplayer: ^0.10.0
 
 dev_dependencies:
   flutter_test:
